@@ -10,7 +10,7 @@ SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
 
 # Nombre del ejecutable de salida
-OUTPUT = build/app
+OUTPUT = app
 
 # Target principal: build
 build: $(OBJECTS)
@@ -26,4 +26,4 @@ run: build
 
 # Regla para limpiar archivos generados
 clean:
-	del /Q .\build\*
+	del /Q .\build\* $(OUTPUT).exe
