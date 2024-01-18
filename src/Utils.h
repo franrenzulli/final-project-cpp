@@ -7,4 +7,4 @@ using namespace sf;
 
 Vector2f round(const sf::Vector2f vector);
 
-Vector2f Center(Text &tt);
+void setCenter(Text &tt);

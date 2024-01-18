@@ -14,5 +14,6 @@ public:
 private:
     Font m_pacfont, m_namco_font;
     Text m_title;
+    CircleShape m_circ;
     Entrylist m_opts = Entrylist({300,500}, {0,50});
 };

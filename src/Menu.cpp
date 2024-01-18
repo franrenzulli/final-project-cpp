@@ -8,15 +8,23 @@ Menu::Menu() {
 
     m_title.setFont(m_pacfont);
     m_title.setString("PACMAN");
+    auto bounds = m_title.getLocalBounds();
+    m_title.setPosition(640 - (bounds.left+bounds.width/2), 50);
     m_title.setFillColor({255,255,0});
     m_title.setOutlineColor({0,0,255});
-    m_title.setOrigin(Center(m_title));
-    m_title.setPosition(640, 100);
-    m_title.setCharacterSize(100);
+    m_title.setCharacterSize(120);
+
+    m_circ.setPosition(m_title.getPosition());
+    m_circ.setRadius(5);
+    m_circ.setFillColor({0,255,0});
 
     m_opts.AddEntry("start");
     m_opts.AddEntry("highscores");
+    m_opts.AddEntry("exit");
     m_opts.setFont(m_namco_font);
+    m_opts.setFontSize(25);
+    Color fColor(200,200,50), olColor(255,255,255);
+    m_opts.setFillColor(fColor);
     m_opts.updateAll();
     
     /*
@@ -45,6 +53,7 @@ void Menu::Draw(RenderWindow &window) {
     window.clear({0,0,0});
 
     window.draw(m_title);
+    window.draw(m_circ);
     for (auto e : m_opts.getEntries()) {
         window.draw(e);
     }
