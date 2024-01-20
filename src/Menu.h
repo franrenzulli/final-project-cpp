@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Scene.h"
-#include "Entrylist.h"
+#include "TextList.h"
 
 class Menu : public Scene {
 public:
@@ -14,6 +14,5 @@ public:
 private:
     Font m_pacfont, m_namco_font;
     Text m_title;
-    CircleShape m_circ;
-    Entrylist m_opts = Entrylist({300,500}, {0,50});
+    TextList m_opts = TextList({300,500}, {0,50});
 };

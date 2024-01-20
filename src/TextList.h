@@ -5,10 +5,10 @@
 
 using namespace sf;
 
-class Entrylist {
+class TextList {
 public:
-    Entrylist();
-    Entrylist(Vector2f pos, Vector2f offset);
+    TextList();
+    TextList(Vector2f pos, Vector2f offset);
     void updateAll();
     void AddEntry(std::string title);
     std::vector<Text> getEntries() const;
