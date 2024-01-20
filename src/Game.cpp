@@ -2,7 +2,7 @@
 #include "Game.h"
 
 // chequear resolucion
-Game::Game(Scene *s) : m_window(VideoMode(1280, 1024), "Final Project Game"), m_scene(s) {
+Game::Game(Scene *s) : m_window(VideoMode(1280, 960), "Final Project Game"), m_scene(s) {
     m_window.setFramerateLimit(60);
 }
 
@@ -25,12 +25,13 @@ void Game::ProcessEvents() {
     while (m_window.pollEvent(e)) {
         if (e.type == Event::Closed)
             m_window.close();
+        else
+            m_scene->ProcessEvents(*this, e);
     }
 }
 
 void Game::Update() {
     m_scene->Update(*this);
-
 }
 
 void Game::Draw() {
@@ -39,4 +40,8 @@ void Game::Draw() {
 
 void Game::SetScene(Scene *next_scene) {
     m_next_scene = next_scene;
+}
+
+void Game::Exit() {
+    m_window.close();
 }
