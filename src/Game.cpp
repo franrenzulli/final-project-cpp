@@ -41,3 +41,7 @@ void Game::Draw() {
 void Game::SetScene(Scene *next_scene) {
     m_next_scene = next_scene;
 }
+
+void Game::Exit() {
+    m_window.close();
+}

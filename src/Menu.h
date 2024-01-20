@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Scene.h"
+#include "Game.h"
 #include "TextList.h"
 
 class Menu : public Scene {
@@ -13,6 +13,6 @@ public:
     void Draw(RenderWindow &window) override;
 private:
     Font m_pacfont, m_namco_font;
-    Text m_title;
+    Text m_title, m_footer;
     TextList m_opts = TextList({300,500}, {0,50});
 };

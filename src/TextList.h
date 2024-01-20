@@ -17,6 +17,9 @@ public:
     void setFillColor(Color &c);
     void setOutlineColor(Color &c);
     void setOutlineThickness(int t);
+    void moveCursorDown();
+    void moveCursorUp();
+    int getSelected();
 private:
     std::vector<Text> m_entries;
     Vector2f m_position, m_offset;
@@ -24,4 +27,5 @@ private:
     Color m_fillColor, m_outlineColor;
     int m_outlineThickness = 0;
     int m_fontSize = 30;
+    int m_selected = 0;
 };
