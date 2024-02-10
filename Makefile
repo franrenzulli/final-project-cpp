@@ -2,7 +2,7 @@
 # Ruta sfml: C:/libs/SFML-2.6.1
 
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -IC:/libs/SFML-2.6.1/include
+CXXFLAGS = -std=c++11 -Wall -Wextra -I./libs/SFML-2.6.1/include
 LDFLAGS = -LC:/libs/SFML-2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system
 
 # Nombres de los archivos fuente y objetos
