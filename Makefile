@@ -3,7 +3,7 @@
 
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -I./libs/SFML-2.6.1/include
-LDFLAGS = -LC:/libs/SFML-2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS = -L./libs/SFML-2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system
 
 # Nombres de los archivos fuente y objetos
 SOURCES = $(wildcard src/*.cpp)
