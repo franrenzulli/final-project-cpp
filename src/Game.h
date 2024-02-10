@@ -16,6 +16,7 @@ public:
     void Update();
     void Draw();
     void SetScene(Scene *next_scene);
+    void Exit();
 private:
     RenderWindow m_window;
     Scene *m_scene;
