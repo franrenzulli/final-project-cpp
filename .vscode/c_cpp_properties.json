@@ -3,7 +3,8 @@
     {
       "name": "windows-gcc-x64",
       "includePath": [
-        "${workspaceFolder}/**"
+        "${workspaceFolder}/**",
+        "C:\\libs\\SFML-2.6.1\\include"
       ],
       "compilerPath": "C:/mingw32/bin/gcc.exe",
       "cStandard": "${default}",
