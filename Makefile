@@ -1,7 +1,7 @@
 # Configuración del compilador
 # Ruta sfml: C:/libs/SFML-2.6.1
 
-CXX = g++
+CXX = C:/mingw32/bin/g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -I./libs/SFML-2.6.1/include
 LDFLAGS = -L./libs/SFML-2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system
 
