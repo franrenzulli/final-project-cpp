@@ -23,7 +23,6 @@ build/%.o: src/%.cpp
 # Target para ejecutar el programa
 run: build
 	./$(OUTPUT)
-
 # Regla para limpiar archivos generados
 clean:
 	del /Q .\build\* $(OUTPUT).exe
