@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/emaa_forlin/Documents/Ingeniería Informática/1° Año/Cuatrimestre 2/POO/final-project-cpp",
-      "program": "c:/Users/emaa_forlin/Documents/Ingeniería Informática/1° Año/Cuatrimestre 2/POO/final-project-cpp/build/Debug/outDebug",
+      "cwd": "c:/Users/emaa_forlin/Documents/Ingeniería Informática/1° Año/Cuatrimestre 2/POO/final-project-cpp/test",
+      "program": "c:/Users/emaa_forlin/Documents/Ingeniería Informática/1° Año/Cuatrimestre 2/POO/final-project-cpp/test/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
