@@ -2,7 +2,7 @@
 #include "Game.h"
 
 // chequear resolucion
-Game::Game(Scene *s) : m_window(VideoMode(1280, 960), "Final Project Game"), m_scene(s) {
+Game::Game(Scene *s) : m_window(VideoMode(1280, 720), "Final Project Game"), m_scene(s) {
     m_window.setFramerateLimit(60);
 }
 

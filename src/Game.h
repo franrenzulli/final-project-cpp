@@ -11,7 +11,6 @@ public:
     
     // starts main loop
     void Run();
-
     void ProcessEvents();
     void Update();
     void Draw();
