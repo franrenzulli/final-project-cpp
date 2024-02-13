@@ -1,6 +1,11 @@
 #include "Menu.h"
+#include "Match.h"
 #include <iostream>
+
+
 Menu::Menu() {
+	
+	// Cargamos fondo, textos, fuentes, posicionamos
 	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
 	
 	m_t1.setFont(m_f1);
@@ -23,6 +28,10 @@ Menu::~Menu() {}
 void Menu::ProcessEvents(Game &game, Event &event) {
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.Exit();
+	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return){
+		// Seteamos la escena de la pelea
+		game.SetScene(new Match());
+		
 	}
 }
 void Menu::Update(Game &game) {}
