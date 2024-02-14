@@ -10,6 +10,7 @@ class Object {
 public:
 	Object(std::string fname);
 	void Draw(RenderWindow &window);
+	bool CollideWith(const Object &o);
 protected:
 	Texture m_texture;
 	Sprite m_sprite;
