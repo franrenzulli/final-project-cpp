@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Scene.h"
+#include "Player.h"
 
 class Match : public Scene {
 public:
@@ -19,4 +20,5 @@ private:
 	Texture m_tex_ground;
 	Sprite m_spr_background;
 	Sprite m_spr_ground;
+	Player p1, p2;
 };

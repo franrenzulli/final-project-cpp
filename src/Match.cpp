@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Match::Match() {
+Match::Match() : p1(true), p2(false){
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
 	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
@@ -24,6 +24,11 @@ Match::Match() {
 	m_spr_ground.setScale(1, 1);
 	
 	m_spr_ground.setPosition(0,625);
+	
+	
+	// Players
+	
+	
 }
 
 Match::~Match() {}
@@ -44,5 +49,7 @@ void Match::Draw(RenderWindow &window) {
 	window.draw(m_spr_background);
 	window.draw(m_spr_ground);
 	window.draw(m_t1);
+	p1.Draw(window);
+	p2.Draw(window);	
 	window.display();
 }

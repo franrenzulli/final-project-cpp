@@ -7,4 +7,5 @@ Object::Object(std::string fname) {
 
 void Object::Draw(RenderWindow &window) {
 	window.draw(m_sprite);
+	
 }
