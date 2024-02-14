@@ -6,7 +6,7 @@
 class Object {
 public:
 	Object(std::string filename);
-	void RenderWindow(RenderWindow &window);
+	void Draw(RenderWindow &window);
 private:
 	Texture m_texture;
 	Sprite m_sprite;
