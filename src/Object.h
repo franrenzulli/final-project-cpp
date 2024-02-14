@@ -9,6 +9,7 @@ using namespace sf;
 class Object {
 public:
 	Object(std::string fname);
+	void Draw(RenderWindow &window);
 protected:
 	Texture m_texture;
 	Sprite m_sprite;
