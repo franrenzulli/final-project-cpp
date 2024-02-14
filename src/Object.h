@@ -1,13 +1,15 @@
-#pragma once
-
+#ifndef OBJECT_H
+#define OBJECT_H
 #include <SFML/Graphics/Texture.hpp>
-
+#include <SFML/Graphics/Sprite.hpp>
+#include <string>
+#include <SFML/Graphics/RenderWindow.hpp>
+using namespace sf;
 
 class Object {
 public:
-	Object(std::string filename);
-	void Draw(RenderWindow &window);
-private:
+	Object(std::string fname);
+protected:
 	Texture m_texture;
 	Sprite m_sprite;
 };
