@@ -25,7 +25,6 @@ Match::Match() : p1(true), p2(false){
 	
 	m_spr_ground.setPosition(0,625);
 	
-	
 	// Players
 	
 	
@@ -42,7 +41,10 @@ void Match::ProcessEvents(Game &game, Event &event) {
 		game.Exit();
 	}
 }
-void Match::Update(Game &game) {}
+void Match::Update(Game &game) {
+	p1.Update();
+	p2.Update();
+}
 
 void Match::Draw(RenderWindow &window) {
 	window.clear({0,0,0});
