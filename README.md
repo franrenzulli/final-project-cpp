@@ -21,6 +21,6 @@ El proyecto Street Fighters es una copia del conocido juego, que consiste en pel
 🧉 Pronto!
  
 ## 👩🏻‍💻 Colaboradores:
-🔰  @franrenzulli
-🔰  @emaforlin
+🔰  @franrenzulli<br>
+🔰  @emaforlin<br>
 🔰  @maxippacheco
