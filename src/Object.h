@@ -6,7 +6,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 using namespace sf;
 
-class Object {
+class Object { // Clase que se encarga de cargar las imagenes de cada sprite y pintarlas en pantalla
 public:
 	Object(std::string fname);
 	void Draw(RenderWindow &window);

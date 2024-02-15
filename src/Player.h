@@ -8,8 +8,8 @@ public:
 	Player(bool player_one);
 	void Update();
 private:
-	bool player_one;
-	sf::Keyboard::Key m_up, m_right, m_down, m_left;
+	bool player_one; // Indica si es el jugador 1 o el 2 
+	sf::Keyboard::Key m_up, m_right, m_down, m_left; // Teclas
 };
 
 #endif

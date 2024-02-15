@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Scene.h"
 
-class Menu : public Scene {
+class Menu : public Scene { // Creamos la escena Menu
 public:
     Menu();
     ~Menu();

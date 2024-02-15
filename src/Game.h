@@ -9,7 +9,7 @@ class Game {
 public:
     Game(Scene *s);
     
-    // starts main loop
+    // Empieza el loop
     void Run();
     void ProcessEvents();
     void Update();

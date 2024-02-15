@@ -1,10 +1,9 @@
 #include "Match.h"
 #include <iostream>
 
-
 Match::Match() : p1(true), p2(false){
 	
-	// Cargamos fondo, textos, fuentes, posicionamos
+	// Cargamos fondo, textos, fuentes, suelo y posicionamos
 	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
 	
 	m_t1.setFont(m_f1);
@@ -25,28 +24,21 @@ Match::Match() : p1(true), p2(false){
 	
 	m_spr_ground.setPosition(0,625);
 	
-	// Players
-	
-	
 }
 
 Match::~Match() {}
 
-
-void Match::ProcessEvents(Game &game, Event &event) {
+void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
-		game.Exit();
-	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return){
-		// 
 		game.Exit();
 	}
 }
-void Match::Update(Game &game) {
+void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
 	p1.Update();
 	p2.Update();
 }
 
-void Match::Draw(RenderWindow &window) {
+void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores
 	window.clear({0,0,0});
 	window.draw(m_spr_background);
 	window.draw(m_spr_ground);

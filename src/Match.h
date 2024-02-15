@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "Player.h"
 
-class Match : public Scene {
+class Match : public Scene { // Creamos escena Match
 public:
 	Match();
 	~Match();
