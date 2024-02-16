@@ -2,7 +2,7 @@
 #include "Menu.h"
 #include <iostream>
 
-Match::Match() : p1(true), p2(false){
+Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	
 	// Cargamos fondo, textos, fuentes, suelo y posicionamos
 	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
@@ -41,6 +41,8 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
 	p1.Update();
 	p2.Update();
+	hb_p1.SetLifeTo(p1.GetLifes()); // La barra de salud se actualiza con el valor de player.GetLifes()
+	hb_p2.SetLifeTo(p2.GetLifes());
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores
@@ -49,7 +51,11 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	window.draw(m_spr_ground);
 	window.draw(m_t1);
 	window.draw(m_t2);
+	
 	p1.Draw(window);
-	p2.Draw(window);	
+	p2.Draw(window);
+	hb_p1.Draw(window);
+	hb_p2.Draw(window);
+	
 	window.display();
 }
