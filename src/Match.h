@@ -16,6 +16,7 @@ public:
 private:
 	Font m_f1;
 	Text m_t1;
+	Text m_t2;
 	Texture m_tex_background;
 	Texture m_tex_ground;
 	Sprite m_spr_background;
