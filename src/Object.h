@@ -11,6 +11,7 @@ public:
 	Object(std::string fname);
 	void Draw(RenderWindow &window);
 	bool CollideWith(const Object &o);
+	void ChangeTexture(std::string fname); // Cambia textura de los sprites
 protected:
 	Texture m_texture;
 	Sprite m_sprite;

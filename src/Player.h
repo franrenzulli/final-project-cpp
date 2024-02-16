@@ -6,7 +6,7 @@
 class Player : public Object{
 public:
 	Player(bool player_one);
-	void Update();
+	void Update(bool player_one);
 	int GetLifes();
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 

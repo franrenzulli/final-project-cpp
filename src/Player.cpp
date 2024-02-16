@@ -29,7 +29,7 @@ Player::Player(bool player_one) : Object(player_one?"../assets/images/ken.png":"
 	
 }
 
-void Player::Update(){ // Input de teclas para movimientos
+void Player::Update(bool player_one){ // Input de teclas para movimientos
 	if(Keyboard::isKeyPressed(m_left)){
 		m_sprite.setScale(1,1);
 		m_sprite.move(-5,0);		
@@ -51,6 +51,13 @@ void Player::Update(){ // Input de teclas para movimientos
 		// Aplicar movimiento vertical para el salto
 		m_sprite.move(0, m_jumpSpeed);
 		
+		// La textura cambia segun que jugador es
+		if(!player_one){
+			ChangeTexture("../assets/images/ryujumping.png");
+		}else{
+			ChangeTexture("../assets/images/kenjumping.png");
+		}
+		
 		// Incrementar la velocidad vertical (simulando la gravedad)
 		m_jumpSpeed += 0.7f;
 		
@@ -58,8 +65,17 @@ void Player::Update(){ // Input de teclas para movimientos
 		if(m_sprite.getPosition().y >= 300){
 			m_sprite.setPosition(m_sprite.getPosition().x, 300);
 			m_isJumping = false;
+			
+			// La textura cambia segun que jugador es
+			if(!player_one){
+				ChangeTexture("../assets/images/ryu.png");
+			}else{
+				ChangeTexture("../assets/images/ken.png");
+			}
 		}
 	}
+	
+	
 }
 
 int Player::GetLifes() {
