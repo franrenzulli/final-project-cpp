@@ -10,6 +10,8 @@ public:
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	sf::Keyboard::Key m_up, m_right, m_down, m_left; // Teclas
+	bool m_isJumping;
+	float m_jumpSpeed;
 };
 
 #endif
