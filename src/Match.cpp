@@ -39,10 +39,11 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	}
 }
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
-	p1.Update(true);
-	p2.Update(false);
-	hb_p1.SetLifeTo(p1.GetLife()); // La barra de salud se actualiza con el valor de player.GetLifes()
-	hb_p2.SetLifeTo(p2.GetLife());
+	p1.Update(true, p2, hb_p2);  // El Jugador 1 se actualiza con el Jugador 2 como oponente
+	p2.Update(false, p1, hb_p1);  // El Jugador 2 se actualiza con el Jugador 1 como oponente
+	
+	hb_p1.SetLifeTo(p1.GetLife());  // Actualiza la barra de salud del Jugador 1 según su vida
+	hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vid
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores

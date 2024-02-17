@@ -1,10 +1,11 @@
 #include <iostream>
 #include "Player.h"
+#include "HealthBar.h"
 #include <SFML/Window/Keyboard.hpp>
 
 using namespace sf;
 
-Player::Player(bool player_one) : Object(player_one?"../assets/images/ken.png":"../assets/images/ryu.png") {
+Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png" : "../assets/images/ryu.png") {
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
 		m_up = Keyboard::Key::W;
@@ -31,7 +32,7 @@ Player::Player(bool player_one) : Object(player_one?"../assets/images/ken.png":"
 	
 }
 
-void Player::Update(bool player_one){ // Input de teclas para movimientos
+void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealthBar){ // Input de teclas para movimientos
 	if(Keyboard::isKeyPressed(m_left)){
 		m_sprite.setScale(1,1);
 		m_sprite.move(-5,0);		
@@ -77,24 +78,46 @@ void Player::Update(bool player_one){ // Input de teclas para movimientos
 		}
 	}
 	
-	bool isAttackPressed = Keyboard::isKeyPressed(Keyboard::J);
+	// solo funciona para P1
+	bool isAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::J) : Keyboard::isKeyPressed(Keyboard::K);
+	
 	if (player_one && isAttackPressed && !m_wasAttackPressed) {
-		Attack();
+		Attack(opponent, opponentHealthBar, player_one);
+	}else if(!player_one && isAttackPressed && !m_wasAttackPressed){
+		Attack(opponent, opponentHealthBar, !player_one);
 	}
 	
 	/*
-		realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
-		Con esto nos evitamos multiples ejecuciones de Attack() ya que antes cuando apretabamos la letra J
-		El ataque se realizaba muchas veces en simultaneo
+	realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
+	Con esto nos evitamos múltiples ejecuciones de Attack() ya que antes cuando apretábamos la letra J
+	El ataque se realizaba muchas veces en simultáneo
 	*/
 	m_wasAttackPressed = isAttackPressed;
 	
 }
 
-void Player::Attack(){
-	std::cout << "¡Ataque realizado!" << std::endl;
+bool Player::CheckCollision(const Player& other) const {
+	return Object::CheckCollision(other);
 }
 
+void Player::Attack( Player& opponent, HealthBar& opponentHealthBar, bool attackerIsPlayerOne){
+	
+	float damage = 2.0f;
+	
+	if(CheckCollision(opponent) && attackerIsPlayerOne){
+		
+		// restamos vida al oponente
+		opponent.SetLife(opponent.GetLife() - damage);
+		// actualizamos la healthBar del oponente
+		opponentHealthBar.SetLifeTo(opponent.GetLife());
+		
+	}else if( opponent.CheckCollision(*this) && !attackerIsPlayerOne ){
+		SetLife(GetLife() - damage);
+		opponentHealthBar.SetLifeTo(GetLife());
+	}
+	
+	std::cout << "¡Ataque realizado! Causa " << damage << " de daño." << std::endl;
+}
 
 void Player::SetLife(float perc) {
 	life_percent = perc;
