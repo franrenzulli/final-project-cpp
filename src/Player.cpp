@@ -33,6 +33,15 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 }
 
 void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealthBar){ // Input de teclas para movimientos
+	
+	// Verificación de muerte
+	if (GetLife() <= 0) {
+		SetLife(0);
+		std::cout << "Jugador " << (player_one ? "1" : "2") << " ha muerto." << std::endl;
+		return;
+	}
+	
+	
 	if(Keyboard::isKeyPressed(m_left)){
 		m_sprite.setScale(1,1);
 		m_sprite.move(-5,0);		
@@ -94,6 +103,7 @@ void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealth
 	*/
 	m_wasAttackPressed = isAttackPressed;
 	
+	
 }
 
 bool Player::CheckCollision(const Player& other) const {
@@ -102,7 +112,7 @@ bool Player::CheckCollision(const Player& other) const {
 
 void Player::Attack( Player& opponent, HealthBar& opponentHealthBar, bool attackerIsPlayerOne){
 	
-	float damage = 2.0f;
+	float damage = 10.0f;
 	
 	if(CheckCollision(opponent) && attackerIsPlayerOne){
 		

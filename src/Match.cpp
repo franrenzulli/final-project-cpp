@@ -29,6 +29,13 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	
 	m_spr_ground.setPosition(0,625);
 	
+	gameEnded = false;
+	winner = 0; 
+	
+	blackoutRect.setSize(Vector2f(1280, 720));  // Ajusta el tamaño según la resolución de tu ventana
+	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
+
+	
 }
 
 Match::~Match() {}
@@ -44,6 +51,23 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 	
 	hb_p1.SetLifeTo(p1.GetLife());  // Actualiza la barra de salud del Jugador 1 según su vida
 	hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vid
+	
+	// Verificación de muerte
+	if (p1.GetLife() <= 0 || p2.GetLife() <= 0) {
+		gameEnded = true;
+		winner = (p1.GetLife() <= 0) ? 2 : 1;
+		
+		// Cambiar la opacidad del rectángulo
+		blackoutRect.setFillColor(Color(0, 0, 0, 128));  
+		
+		return;
+	}
+	
+	// Verificación de muerte y mensaje
+	if (gameEnded) {
+		std::cout << "Jugador " << (p1.GetLife() <= 0 ? "1" : "2") << " ha muerto." << std::endl;
+		return;
+	}
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores
@@ -58,5 +82,20 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	hb_p1.Draw(window);
 	hb_p2.Draw(window);
 	
+	if (gameEnded) {
+		// Centrar el mensaje en la pantalla
+		sf::Text winnerText;
+		winnerText.setFont(m_f1);
+		winnerText.setFillColor(Color(255, 255, 255));
+		winnerText.setCharacterSize(50);
+		winnerText.setString("Player " + std::to_string(winner) + " has won!");
+		winnerText.setPosition((1280 - winnerText.getLocalBounds().width) / 2, 300);
+		
+		window.draw(winnerText);
+		window.draw(blackoutRect);
+		
+	}
+	
 	window.display();
 }
+

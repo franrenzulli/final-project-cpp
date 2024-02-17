@@ -14,7 +14,15 @@ public:
 	void ProcessEvents(Game &game, Event &event) override;
 	void Update(Game &game) override;
 	void Draw(RenderWindow &window) override;
+	bool GetMatchStatus(){
+		return this->gameEnded;
+	};
+	
 private:
+	bool gameEnded;
+	int winner;
+	RectangleShape blackoutRect;
+	
 	Font m_f1;
 	Text m_t1;
 	Text m_t2;
