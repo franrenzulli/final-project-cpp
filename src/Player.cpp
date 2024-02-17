@@ -12,6 +12,7 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 		m_right = Keyboard::Key::D;
 		m_down = Keyboard::Key::S;
 		m_left = Keyboard::Key::A;
+		m_attackBasic = Keyboard::Key::J;
 		m_sprite.setScale(-1,1);
 		
 	}else{
@@ -20,6 +21,7 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 		m_right = Keyboard::Key::Right;
 		m_down = Keyboard::Key::Down;
 		m_left = Keyboard::Key::Left;
+		m_attackBasic = Keyboard::Key::K;
 	}
 	
 	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
@@ -32,67 +34,58 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 	
 }
 
-void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealthBar){ // Input de teclas para movimientos
-	
-	// Verificación de muerte
-	if (GetLife() <= 0) {
-		SetLife(0);
-		std::cout << "Jugador " << (player_one ? "1" : "2") << " ha muerto." << std::endl;
-		return;
-	}
-	
-	
-	if(Keyboard::isKeyPressed(m_left)){
-		m_sprite.setScale(1,1);
-		m_sprite.move(-5,0);		
-	}
-	
-	if(Keyboard::isKeyPressed(m_right)){
-		m_sprite.move(+5,0);
-		m_sprite.setScale(-1,1);
-	}
-	
-	// salto
-	if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
-		m_isJumping = true;
-		m_jumpSpeed = -20.0f;
-	}
-	
-	// movimiento vertical
-	if(m_isJumping){
-		// Aplicar movimiento vertical para el salto
-		m_sprite.move(0, m_jumpSpeed);
-		
-		// La textura cambia segun que jugador es
-		if(!player_one){
-			ChangeTexture("../assets/images/ryujumping.png");
-		}else{
-			ChangeTexture("../assets/images/kenjumping.png");
+void Player::Update(Player& opponent){ // Input de teclas para movimientos
+	if (life_percent > 0){ // chequea que el jugador este vivo
+		if(Keyboard::isKeyPressed(m_left)){
+			m_sprite.setScale(1,1);
+			m_sprite.move(-5,0);		
 		}
 		
-		// Incrementar la velocidad vertical (simulando la gravedad)
-		m_jumpSpeed += 0.7f;
+		if(Keyboard::isKeyPressed(m_right)){
+			m_sprite.move(+5,0);
+			m_sprite.setScale(-1,1);
+		}
 		
-		// Comprobar si el jugador aterrizo
-		if(m_sprite.getPosition().y >= 300){
-			m_sprite.setPosition(m_sprite.getPosition().x, 300);
-			m_isJumping = false;
+		// salto
+		if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
+			m_isJumping = true;
+			m_jumpSpeed = -20.0f;
+		}
+		
+		// movimiento vertical
+		if(m_isJumping){
+			// Aplicar movimiento vertical para el salto
+			m_sprite.move(0, m_jumpSpeed);
 			
 			// La textura cambia segun que jugador es
 			if(!player_one){
-				ChangeTexture("../assets/images/ryu.png");
+				ChangeTexture("../assets/images/ryujumping.png");
 			}else{
-				ChangeTexture("../assets/images/ken.png");
+				ChangeTexture("../assets/images/kenjumping.png");
+			}
+			
+			// Incrementar la velocidad vertical (simulando la gravedad)
+			m_jumpSpeed += 0.7f;
+			
+			// Comprobar si el jugador aterrizo
+			if(m_sprite.getPosition().y >= 300){
+				m_sprite.setPosition(m_sprite.getPosition().x, 300);
+				m_isJumping = false;
+				
+				// La textura cambia segun que jugador es
+				if(!player_one){
+					ChangeTexture("../assets/images/ryu.png");
+				}else{
+					ChangeTexture("../assets/images/ken.png");
+				}
 			}
 		}
 	}
+
+	// ahora funciona un lujo
+	bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
 	
-	// solo funciona para P1
-	bool isAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::J) : Keyboard::isKeyPressed(Keyboard::K);
-	
-	if (player_one && isAttackPressed && !m_wasAttackPressed) {
-		Attack(opponent);
-	}else if(!player_one && isAttackPressed && !m_wasAttackPressed){
+	if (isAttackPressed && !m_wasAttackPressed) {
 		Attack(opponent);
 	}
 	
@@ -102,8 +95,6 @@ void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealth
 	El ataque se realizaba muchas veces en simultáneo
 	*/
 	m_wasAttackPressed = isAttackPressed;
-	
-	
 }
 
 bool Player::CheckCollision(const Player& other) const {
@@ -111,21 +102,18 @@ bool Player::CheckCollision(const Player& other) const {
 }
 
 void Player::Attack( Player& opponent){
-	
 	float damage = 10.0f;
 	
-	if(CheckCollision(opponent) && this->player_one){
-		
-		// restamos vida al oponente
+	if(CheckCollision(opponent)){
+		// le restamos vida al player 2
 		opponent.SetLife(opponent.GetLife() - damage);
-		// actualizamos la vida del player 2
-	}else if( opponent.CheckCollision(*this) && !this->player_one){
-		// actualizamos la vida del player 1
+	} else if(opponent.CheckCollision(*this)){
+		//le restamos vida al player 1
 		SetLife(GetLife() - damage);
 	}
-	
-	std::cout << "¡Ataque realizado! Causa " << damage << " de daño." << std::endl;
+	std::cout<<"¡Ataque realizado! Causa " << damage << " de daño." << std::endl;
 }
+
 
 void Player::SetLife(float perc) {
 	life_percent = perc;

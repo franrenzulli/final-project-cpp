@@ -35,7 +35,7 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	blackoutRect.setSize(Vector2f(1280, 720));  // Ajusta el tamaño según la resolución de tu ventana
 	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
 
-	
+	chrono.Start();
 }
 
 Match::~Match() {}
@@ -46,12 +46,6 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	}
 }
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
-	p1.Update(true, p2, hb_p2);  // El Jugador 1 se actualiza con el Jugador 2 como oponente
-	p2.Update(false, p1, hb_p1);  // El Jugador 2 se actualiza con el Jugador 1 como oponente
-	
-	hb_p1.SetLifeTo(p1.GetLife());  // Actualiza la barra de salud del Jugador 1 según su vida
-	hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vid
-	
 	// Verificación de muerte
 	if (p1.GetLife() <= 0 || p2.GetLife() <= 0) {
 		gameEnded = true;
@@ -68,6 +62,19 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		std::cout << "Jugador " << (p1.GetLife() <= 0 ? "1" : "2") << " ha muerto." << std::endl;
 		return;
 	}
+
+	if (chrono.SecondsLeft() > 0) {
+		chrono.Update(); // Actualiza el cronometro
+		if (chrono.SecondsLeft() == 0) {
+			game.SetScene(new Menu());
+		}
+		
+		p1.Update(p2);  // El Jugador 1 se actualiza con el Jugador 2 como oponente
+		p2.Update(p1);  // El Jugador 2 se actualiza con el Jugador 1 como oponente
+		
+		hb_p1.SetLifeTo(p1.GetLife());  // Actualiza la barra de salud del Jugador 1 según su vida
+		hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vidas
+	}
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores
@@ -81,7 +88,7 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	p2.Draw(window);
 	hb_p1.Draw(window);
 	hb_p2.Draw(window);
-	
+	chrono.Draw(window);
 	if (gameEnded) {
 		// Centrar el mensaje en la pantalla
 		sf::Text winnerText;
@@ -95,7 +102,6 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		window.draw(blackoutRect);
 		
 	}
-	
 	window.display();
 }
 
