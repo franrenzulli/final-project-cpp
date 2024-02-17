@@ -91,9 +91,9 @@ void Player::Update(bool player_one, Player& opponent, HealthBar& opponentHealth
 	bool isAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::J) : Keyboard::isKeyPressed(Keyboard::K);
 	
 	if (player_one && isAttackPressed && !m_wasAttackPressed) {
-		Attack(opponent, opponentHealthBar, player_one);
+		Attack(opponent);
 	}else if(!player_one && isAttackPressed && !m_wasAttackPressed){
-		Attack(opponent, opponentHealthBar, !player_one);
+		Attack(opponent);
 	}
 	
 	/*
@@ -110,20 +110,18 @@ bool Player::CheckCollision(const Player& other) const {
 	return Object::CheckCollision(other);
 }
 
-void Player::Attack( Player& opponent, HealthBar& opponentHealthBar, bool attackerIsPlayerOne){
+void Player::Attack( Player& opponent){
 	
 	float damage = 10.0f;
 	
-	if(CheckCollision(opponent) && attackerIsPlayerOne){
+	if(CheckCollision(opponent) && this->player_one){
 		
 		// restamos vida al oponente
 		opponent.SetLife(opponent.GetLife() - damage);
-		// actualizamos la healthBar del oponente
-		opponentHealthBar.SetLifeTo(opponent.GetLife());
-		
-	}else if( opponent.CheckCollision(*this) && !attackerIsPlayerOne ){
+		// actualizamos la vida del player 2
+	}else if( opponent.CheckCollision(*this) && !this->player_one){
+		// actualizamos la vida del player 1
 		SetLife(GetLife() - damage);
-		opponentHealthBar.SetLifeTo(GetLife());
 	}
 	
 	std::cout << "¡Ataque realizado! Causa " << damage << " de daño." << std::endl;

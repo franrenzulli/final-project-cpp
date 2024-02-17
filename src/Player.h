@@ -11,7 +11,7 @@ public:
 	void Update(bool player_one, Player& opponent, HealthBar& opponentHealthBar);
 	void SetLife(float perc);
 	float GetLife();
-	void Attack(Player& opponent, HealthBar& opponentHealthBar, bool attackerIsPlayerOne);
+	void Attack(Player& opponent);
 	bool CheckCollision(const Player& other) const;
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
