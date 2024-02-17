@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Player.h"
 #include <SFML/Window/Keyboard.hpp>
 
@@ -26,6 +27,7 @@ Player::Player(bool player_one) : Object(player_one?"../assets/images/ken.png":"
 	// variables para el salto
 	m_isJumping = false;
 	m_jumpSpeed = 0.0f;
+	m_wasAttackPressed = false;
 	
 }
 
@@ -75,7 +77,22 @@ void Player::Update(bool player_one){ // Input de teclas para movimientos
 		}
 	}
 	
+	bool isAttackPressed = Keyboard::isKeyPressed(Keyboard::J);
+	if (player_one && isAttackPressed && !m_wasAttackPressed) {
+		Attack();
+	}
 	
+	/*
+		realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
+		Con esto nos evitamos multiples ejecuciones de Attack() ya que antes cuando apretabamos la letra J
+		El ataque se realizaba muchas veces en simultaneo
+	*/
+	m_wasAttackPressed = isAttackPressed;
+	
+}
+
+void Player::Attack(){
+	std::cout << "¡Ataque realizado!" << std::endl;
 }
 
 

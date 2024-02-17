@@ -10,7 +10,7 @@ class Object { // Clase que se encarga de cargar las imagenes de cada sprite y p
 public:
 	Object(std::string fname);
 	void Draw(RenderWindow &window);
-	bool CollideWith(const Object &o);
+	bool CheckCollision(const Object& other) const;
 	void ChangeTexture(std::string fname); // Cambia textura de los sprites
 protected:
 	Texture m_texture;

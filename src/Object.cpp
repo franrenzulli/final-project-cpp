@@ -18,8 +18,6 @@ void Object::Draw(RenderWindow &window) {
 }
 
 // Maneja colisiones de objetos
-bool Object::CollideWith(const Object &o) {
-	auto r1 = this->m_sprite.getGlobalBounds();
-	auto r2 = o.m_sprite.getGlobalBounds();
-	return r1.intersects(r2);
+bool Object::CheckCollision(const Object& other) const {
+	return m_sprite.getGlobalBounds().intersects(other.m_sprite.getGlobalBounds());
 }
