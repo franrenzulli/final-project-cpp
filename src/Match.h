@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "HealthBar.h"
+#include "Chrono.h"
 
 class Match : public Scene { // Creamos escena Match
 public:
@@ -24,4 +25,7 @@ private:
 	Sprite m_spr_ground;
 	Player p1, p2;
 	HealthBar hb_p1, hb_p2;
+	
+	int roundTime = 2;
+	Chrono chrono = Chrono("../assets/fonts/Kanit.ttf", roundTime);
 };
