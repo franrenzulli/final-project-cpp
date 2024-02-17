@@ -41,8 +41,8 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
 	p1.Update(true);
 	p2.Update(false);
-	hb_p1.SetLifeTo(p1.GetLifes()); // La barra de salud se actualiza con el valor de player.GetLifes()
-	hb_p2.SetLifeTo(p2.GetLifes());
+	hb_p1.SetLifeTo(p1.GetLife()); // La barra de salud se actualiza con el valor de player.GetLifes()
+	hb_p2.SetLifeTo(p2.GetLife());
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores

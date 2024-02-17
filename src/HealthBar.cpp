@@ -8,21 +8,19 @@ HealthBar::HealthBar(bool player1) : player_one(player1) {
 	frame_tex.loadFromFile("../assets/images/empty_health_bar.png");
 	frame_spr.setTexture(frame_tex);
 	
-	lifes_tex.loadFromFile("../assets/images/life.png");
+	lifes_tex.loadFromFile("../assets/images/health.png");
 	lifes_spr.setTexture(lifes_tex);
 	
-	Vector2f bar_position = {30,40};
+	Vector2f bar_position = {30, 30};
 	Vector2f bar_origin = {0,0};
 
-	bg_spr.setScale(2, 2.25);
-	frame_spr.setScale(2, 2.25);
-	lifes_spr.setScale(2, 2.25);
+	bg_spr.setScale(4.25, 2.25);
+	frame_spr.setScale(4.25, 2.25);
+	lifes_spr.setScale(4.25, 2.25);
 
 	if (!player_one) {
 		bar_origin = {128, 0}; // set origin in top right corner
-		bar_position = {1250,40};
-		
-		lifes_spr.setOrigin(32, 0);
+		bar_position = {1250, 30};
 	}
 	
 	bg_spr.setOrigin(bar_origin);
@@ -32,6 +30,7 @@ HealthBar::HealthBar(bool player1) : player_one(player1) {
 	frame_spr.setPosition(bar_position);
 	
 	lifes_spr.setPosition(bar_position);
+	lifes_spr.setOrigin(bar_origin);
 }
 
 
@@ -42,14 +41,17 @@ void HealthBar::Draw(RenderWindow &window) {
 }
 
 
-void HealthBar::SetLifeTo(int lifesNumber) {
-	if (lifesNumber < 0) {
-		return;
+void HealthBar::SetLifeTo(float lifesPercent) {
+	if (lifesPercent < 0) {
+		lifesPercent = 0;
+	}
+	if (lifesPercent > 100.0) {
+		lifesPercent = 100.0;
 	}
 	Vector2f currentScale = lifes_spr.getScale();
-	currentScale.x = 2; 
+	currentScale.x = 4.25;
 	
-	Vector2f newScale = { currentScale.x * lifesNumber, currentScale.y };
+	Vector2f newScale = { currentScale.x * lifesPercent/100, currentScale.y };
 
 	lifes_spr.setScale(newScale);
 }

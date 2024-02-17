@@ -6,7 +6,7 @@ class HealthBar {
 public:
 	HealthBar(bool player1);
 	void Draw(RenderWindow &window);
-	void SetLifeTo(int lifesNumber);
+	void SetLifeTo(float lifesPercent);
 private:
 	Texture bg_tex, frame_tex, lifes_tex;
 	Sprite bg_spr, frame_spr, lifes_spr;

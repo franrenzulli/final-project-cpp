@@ -7,13 +7,14 @@ class Player : public Object{
 public:
 	Player(bool player_one);
 	void Update(bool player_one);
-	int GetLifes();
+	void SetLife(float perc);
+	float GetLife();
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	sf::Keyboard::Key m_up, m_right, m_down, m_left; // Teclas
 	bool m_isJumping;
 	float m_jumpSpeed;
-	int left_lifes = 4;
+	float life_percent = 100.0;
 };
 
 #endif

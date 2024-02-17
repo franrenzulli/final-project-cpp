@@ -78,6 +78,11 @@ void Player::Update(bool player_one){ // Input de teclas para movimientos
 	
 }
 
-int Player::GetLifes() {
-	return left_lifes;
+
+void Player::SetLife(float perc) {
+	life_percent = perc;
+}
+
+float Player::GetLife() {
+	return life_percent;
 }
