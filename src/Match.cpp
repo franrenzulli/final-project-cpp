@@ -89,6 +89,18 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	hb_p1.Draw(window);
 	hb_p2.Draw(window);
 	chrono.Draw(window);
+	
+	
+	// Dibujar las bolas de fuego del jugador 1
+	for (const auto& fireball : p1.GetFireballs()) {
+		fireball.Draw(window);
+	}
+	
+	// Dibujar las bolas de fuego del jugador 2
+	for (const auto& fireball : p2.GetFireballs()) {
+		fireball.Draw(window);
+	}
+	
 	if (gameEnded) {
 		// Centrar el mensaje en la pantalla
 		sf::Text winnerText;
@@ -102,6 +114,7 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		window.draw(blackoutRect);
 		
 	}
+	
 	window.display();
 }
 

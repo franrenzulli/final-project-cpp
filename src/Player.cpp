@@ -4,6 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 using namespace sf;
+using namespace std;
 
 Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png" : "../assets/images/ryu.png") {
 	if(player_one){
@@ -58,10 +59,10 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 			m_sprite.move(0, m_jumpSpeed);
 			
 			// La textura cambia segun que jugador es
-			if(!player_one){
-				ChangeTexture("../assets/images/ryujumping.png");
-			}else{
+			if (player_one) {
 				ChangeTexture("../assets/images/kenjumping.png");
+			} else {
+				ChangeTexture("../assets/images/ryujumping.png");
 			}
 			
 			// Incrementar la velocidad vertical (simulando la gravedad)
@@ -73,10 +74,10 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 				m_isJumping = false;
 				
 				// La textura cambia segun que jugador es
-				if(!player_one){
-					ChangeTexture("../assets/images/ryu.png");
-				}else{
+				if (player_one) {
 					ChangeTexture("../assets/images/ken.png");
+				} else {
+					ChangeTexture("../assets/images/ryu.png");
 				}
 			}
 		}
@@ -95,13 +96,38 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 	El ataque se realizaba muchas veces en simultáneo
 	*/
 	m_wasAttackPressed = isAttackPressed;
+	
+	// --- SPECIAL ATTACK ---
+	
+	// movimiento -> sf::seconds()
+	m_deltaTime = seconds(0.0166667f);
+	
+	// Actualizar las bolas de fuego
+	for (auto& fireball : fireballs) {
+		fireball.Update(m_deltaTime.asSeconds());
+	}
+	
+	// Eliminar las bolas de fuego que salieron de la pantalla
+	fireballs.erase(remove_if(fireballs.begin(), fireballs.end(),
+								   [](const Fireball& fireball) {
+									   return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
+								   }), fireballs.end());
+	
+	// Ataque especial
+	bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
+	if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
+		SpecialAttack(opponent);
+	}
+	
+	m_wasSpecialAttackPressed = isSpecialAttackPressed;
+	
 }
 
 bool Player::CheckCollision(const Player& other) const {
 	return Object::CheckCollision(other);
 }
 
-void Player::Attack( Player& opponent){
+void Player::Attack( Player& opponent ){
 	float damage = 10.0f;
 	
 	if(CheckCollision(opponent)){
@@ -114,6 +140,16 @@ void Player::Attack( Player& opponent){
 	std::cout<<"¡Ataque realizado! Causa " << damage << " de daño." << std::endl;
 }
 
+void Player::SpecialAttack(Player& opponent) {
+	if (life_percent > 0) { // Solo puede realizar el ataque especial si el jugador está vivo
+		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, 500.0f);  // 500.0f es la velocidad
+		fireballs.push_back(newFireball);
+	}
+}
+
+void Player::SetDeltaTime(sf::Time deltaTime) {
+	m_deltaTime = deltaTime;
+}
 
 void Player::SetLife(float perc) {
 	life_percent = perc;
@@ -122,3 +158,4 @@ void Player::SetLife(float perc) {
 float Player::GetLife() {
 	return life_percent;
 }
+
