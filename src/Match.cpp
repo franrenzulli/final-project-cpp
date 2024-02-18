@@ -38,6 +38,7 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	chrono.Start();
 }
 
+
 Match::~Match() {}
 
 void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE

@@ -13,7 +13,7 @@ void Object::ChangeTexture(std::string fname){
 }
 
 // Dibuja los objetos en la escena
-void Object::Draw(RenderWindow &window) {
+void Object::Draw(RenderWindow &window) const{
 	window.draw(m_sprite);	
 }
 
