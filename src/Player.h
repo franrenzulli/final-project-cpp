@@ -20,9 +20,7 @@ public:
 	bool CheckCollision(const Player& other) const;
 	void SpecialAttack(Player& opponent);
 	void SetDeltaTime(sf::Time deltaTime);
-	vector<Fireball>& GetFireballs(){
-		return fireballs;
-	};
+	vector<Fireball>& GetFireballs();
 	void ValidateScreenLimits();
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 

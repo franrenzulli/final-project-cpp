@@ -144,8 +144,11 @@ void Player::Attack( Player& opponent ){
 }
 
 void Player::SpecialAttack(Player& opponent) {
+// implementar validaciones en Update()
 	if (life_percent > 0) { // Solo puede realizar el ataque especial si el jugador está vivo
-		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, 500.0f);  // 500.0f es la velocidad
+		float speed;
+		speed = player_one?500.0f:-500.0f; // velocidad y direccion del disparo
+		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed);  
 		fireballs.push_back(newFireball);
 	}
 }
@@ -170,4 +173,7 @@ void Player::ValidateScreenLimits() {
 	
 	if (pos.x < 0)
 		m_sprite.setPosition(0, pos.y);
+}
+vector<Fireball>& Player::GetFireballs() {
+	return fireballs;
 }
