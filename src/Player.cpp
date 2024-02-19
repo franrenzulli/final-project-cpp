@@ -7,6 +7,7 @@ using namespace sf;
 using namespace std;
 
 Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png" : "../assets/images/ryu.png") {
+	this->player_one = player_one;
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
 		m_up = Keyboard::Key::W;
@@ -59,6 +60,7 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 			m_sprite.move(0, m_jumpSpeed);
 			
 			// La textura cambia segun que jugador es
+			
 			if (player_one) {
 				ChangeTexture("../assets/images/kenjumping.png");
 			} else {
