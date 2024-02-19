@@ -35,10 +35,10 @@ path=Object.cpp
 cursor=13:0
 [source]
 path=Player.cpp
-cursor=9:31
+cursor=40:25
 [source]
 path=Match.cpp
-cursor=14:1
+cursor=57:9
 [source]
 path=HealthBar.cpp
 cursor=1:19
@@ -65,10 +65,10 @@ path=Object.h
 cursor=13:1
 [header]
 path=Player.h
-cursor=16:16
+cursor=26:0
 [header]
 path=Match.h
-cursor=17:25
+cursor=19:3
 [header]
 path=HealthBar.h
 cursor=19:3

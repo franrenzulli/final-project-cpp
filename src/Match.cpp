@@ -57,10 +57,20 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		
 		return;
 	}
+	if (chrono.SecondsLeft() == 0) {
+		gameEnded = true;
+		winner = (p1.GetLife() < p2.GetLife()) ? 2 : 1;
+		
+		// Cambiar la opacidad del rectángulo
+		blackoutRect.setFillColor(Color(0, 0, 0, 128));  
+		
+		return;
+	}
+	
 	
 	// Verificación de muerte y mensaje
 	if (gameEnded) {
-		std::cout << "Jugador " << (p1.GetLife() <= 0 ? "1" : "2") << " ha muerto." << std::endl;
+		std::cout << "Jugador " << (p1.GetLife() > p2.GetLife() ? "1" : "2") << " ha ganado." << std::endl;
 		return;
 	}
 

@@ -23,6 +23,7 @@ public:
 	vector<Fireball>& GetFireballs(){
 		return fireballs;
 	};
+	void ValidateScreenLimits();
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas

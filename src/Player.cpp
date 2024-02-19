@@ -38,6 +38,7 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 
 void Player::Update(Player& opponent){ // Input de teclas para movimientos
 	if (life_percent > 0){ // chequea que el jugador este vivo
+		ValidateScreenLimits();
 		if(Keyboard::isKeyPressed(m_left)){
 			m_sprite.setScale(1,1);
 			m_sprite.move(-5,0);		
@@ -161,3 +162,12 @@ float Player::GetLife() {
 	return life_percent;
 }
 
+
+void Player::ValidateScreenLimits() {
+	auto pos = m_sprite.getPosition();
+	if (pos.x > 1280)
+		m_sprite.setPosition(1280, pos.y);
+	
+	if (pos.x < 0)
+		m_sprite.setPosition(0, pos.y);
+}
