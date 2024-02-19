@@ -14,6 +14,7 @@ public:
 	// Obtener los límites de la bola de fuego para detección de colisiones
 	FloatRect GetBounds() const;
 	
+	
 private:
 	float m_speed;
 	Vector2f m_velocity;

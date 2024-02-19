@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "HealthBar.h"
 #include <SFML/Window/Keyboard.hpp>
+#include "BasicAttack.h"
 
 using namespace sf;
 using namespace std;
@@ -17,6 +18,8 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 		m_attackBasic = Keyboard::Key::J;
 		m_sprite.setScale(-1,1);
 		
+		// inicializa los ataques
+		auto basicAttack = BasicAttack();
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
 		m_up = Keyboard::Key::Up;
@@ -88,9 +91,8 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 
 	// ahora funciona un lujo
 	bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
-	
 	if (isAttackPressed && !m_wasAttackPressed) {
-		Attack(opponent);
+		BasicAttack().PerformAttack(*this, opponent);
 	}
 	
 	/*
@@ -130,7 +132,9 @@ bool Player::CheckCollision(const Player& other) const {
 	return Object::CheckCollision(other);
 }
 
-void Player::Attack( Player& opponent ){
+
+// las funciones de ataques deben retornar true si son exitosos
+bool Player::basicAttack(Player& opponent ){
 	float damage = 10.0f;
 	
 	if(CheckCollision(opponent)){
@@ -144,13 +148,11 @@ void Player::Attack( Player& opponent ){
 }
 
 void Player::SpecialAttack(Player& opponent) {
-// implementar validaciones en Update()
-	if (life_percent > 0) { // Solo puede realizar el ataque especial si el jugador está vivo
-		float speed;
-		speed = player_one?500.0f:-500.0f; // velocidad y direccion del disparo
-		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed);  
-		fireballs.push_back(newFireball);
-	}
+	// se chequea que el jugador esta vivo en Player::Update()
+	float speed;
+	speed = player_one?500.0f:-500.0f; // velocidad y direccion del disparo
+	Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed);  
+	fireballs.push_back(newFireball);
 }
 
 void Player::SetDeltaTime(sf::Time deltaTime) {
@@ -177,3 +179,5 @@ void Player::ValidateScreenLimits() {
 vector<Fireball>& Player::GetFireballs() {
 	return fireballs;
 }
+
+

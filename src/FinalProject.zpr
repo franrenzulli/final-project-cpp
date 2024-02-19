@@ -32,10 +32,10 @@ path=Utils.cpp
 cursor=0:0
 [source]
 path=Object.cpp
-cursor=17:1
+cursor=12:1
 [source]
 path=Player.cpp
-cursor=176:15
+cursor=109:9
 [source]
 path=Match.cpp
 cursor=113:1
@@ -48,6 +48,12 @@ cursor=22:0
 [source]
 path=Chrono.cpp
 cursor=0:0
+[source]
+path=Attack.cpp
+cursor=2:0
+[source]
+path=BasicAttack.cpp
+cursor=3:57
 [header]
 path=Game.h
 cursor=12:15
@@ -65,7 +71,7 @@ path=Object.h
 cursor=13:1
 [header]
 path=Player.h
-cursor=22:16
+cursor=38:28
 [header]
 path=Match.h
 cursor=19:3
@@ -78,6 +84,12 @@ cursor=13:44
 [header]
 path=Chrono.h
 cursor=0:0
+[header]
+path=Attack.h
+cursor=20:0
+[header]
+path=BasicAttack.h
+cursor=12:6
 [config]
 name=Debug_Win32
 toolchain=

@@ -4,11 +4,14 @@
 #include "Fireball.h"
 #include <SFML/Window/Keyboard.hpp>
 #include<vector>
+#include "Attack.h"
+#include <map>
 
 using namespace sf;
 using namespace std;
 
 class HealthBar;  // declaración anticipada
+class Attack;
 
 class Player : public Object{
 public:
@@ -16,7 +19,11 @@ public:
 	void Update(Player& opponent);
 	void SetLife(float perc);
 	float GetLife();
-	void Attack(Player& opponent);
+	
+	// ataques
+	bool basicAttack(Player& opponent);
+	
+	
 	bool CheckCollision(const Player& other) const;
 	void SpecialAttack(Player& opponent);
 	void SetDeltaTime(sf::Time deltaTime);
@@ -30,6 +37,7 @@ private:
 	bool m_wasSpecialAttackPressed;
 	float m_jumpSpeed;
 	float life_percent = 100.0;
+	
 	vector<Fireball> fireballs;
 	sf::Time m_deltaTime;
 };
