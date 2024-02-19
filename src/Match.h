@@ -23,6 +23,8 @@ private:
 	bool gameEnded;
 	int winner;
 	RectangleShape blackoutRect;
+	RectangleShape leaderboardRect;
+	RectangleShape menuRect;
 	Font m_f1;
 	Text m_t1;
 	Text m_t2;

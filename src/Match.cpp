@@ -1,23 +1,24 @@
 #include "Match.h"
 #include "Menu.h"
+#include "Leaderboard.h"
 #include <iostream>
 
 Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	
 	// Cargamos fondo, textos, fuentes, suelo y posicionamos
-	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
+	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
 	
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(204, 0, 0));
 	m_t1.setString("Fight!");
-	m_t1.setCharacterSize(50);
-	m_t1.setPosition((1280 - m_t1.getLocalBounds().width)/2, 10);
+	m_t1.setCharacterSize(20);
+	m_t1.setPosition((1280 - m_t1.getLocalBounds().width)/2, 40);
 	
 	m_t2.setFont(m_f1);
 	m_t2.setFillColor(Color(255, 255, 255));
 	m_t2.setString("Press ESCAPE to go back to the menu");
-	m_t2.setCharacterSize(25);
-	m_t2.setPosition(10,680);
+	m_t2.setCharacterSize(13);
+	m_t2.setPosition(10,690);
 	
 	m_tex_background.loadFromFile("../assets/images/fondomatch.png");
 	m_tex_ground.loadFromFile("../assets/images/cobblestoneground.png");
@@ -34,7 +35,11 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	
 	blackoutRect.setSize(Vector2f(1280, 720));  // Ajusta el tamaño según la resolución de tu ventana
 	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
-
+	leaderboardRect.setSize(Vector2f(430, 60)); 
+	leaderboardRect.setFillColor(Color(0, 0, 0, 0)); 
+	menuRect.setSize(Vector2f(480,50));
+	menuRect.setFillColor(Color(212,43,43)); 
+	menuRect.setPosition(0,670);
 	chrono.Start();
 }
 
@@ -42,11 +47,16 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 Match::~Match() {}
 
 void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE
+	
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
+	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
+		game.SetScene(new Leaderboard()); // Seteamos la escena del leaderboard
+		
 	}
 }
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
+	
 	// Verificación de muerte
 	if (p1.GetLife() <= 0 || p2.GetLife() <= 0) {
 		gameEnded = true;
@@ -57,6 +67,7 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		
 		return;
 	}
+	// Verificacion de tiempo terminado
 	if (chrono.SecondsLeft() == 0) {
 		gameEnded = true;
 		winner = (p1.GetLife() < p2.GetLife()) ? 2 : 1;
@@ -66,7 +77,6 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		
 		return;
 	}
-	
 	
 	// Verificación de muerte y mensaje
 	if (gameEnded) {
@@ -89,9 +99,11 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 }
 
 void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo, textos y los jugadores
+	
 	window.clear({0,0,0});
 	window.draw(m_spr_background);
 	window.draw(m_spr_ground);
+	window.draw(menuRect);
 	window.draw(m_t1);
 	window.draw(m_t2);
 	p1.Draw(window);
@@ -119,8 +131,19 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		winnerText.setString("Player " + std::to_string(winner) + " has won!");
 		winnerText.setPosition((1280 - winnerText.getLocalBounds().width) / 2, 300);
 		
-		window.draw(winnerText);
+		leaderboardRect.setFillColor(Color(212,43,43));
+		leaderboardRect.setPosition((1280 - leaderboardRect.getLocalBounds().width) / 2, 390);
+		sf::Text buttonText;
+		buttonText.setFont(m_f1);
+		buttonText.setFillColor(Color(255, 255, 255));
+		buttonText.setCharacterSize(15);
+		buttonText.setString("Press ENTER to save score");
+		buttonText.setPosition((1280 - buttonText.getLocalBounds().width) / 2, 410);
+		
 		window.draw(blackoutRect);
+		window.draw(winnerText);
+		window.draw(leaderboardRect);
+		window.draw(buttonText);
 	}
 	
 	window.display();

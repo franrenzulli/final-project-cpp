@@ -6,17 +6,17 @@
 Menu::Menu() {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
-	m_f1.loadFromFile("../assets/fonts/Kanit.ttf");
+	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
 	
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(255,255,255));
-	m_t1.setString("Press <Enter> to start playing");
-	m_t1.setCharacterSize(40);
-	m_t1.setPosition((1280 - m_t1.getLocalBounds().width)/2, 500);
+	m_t1.setString("Press ENTER to start playing");
+	m_t1.setCharacterSize(20);
+	m_t1.setPosition(90, 300);
 	
-	m_tex_background.loadFromFile("../assets/images/portada.png");
+	m_tex_background.loadFromFile("../assets/images/portada2.png");
 	m_spr_background.setTexture(m_tex_background);
-	m_spr_background.setScale(3.1, 1.75);
+	m_spr_background.setScale(1, 1);
 	
 }
 

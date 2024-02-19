@@ -10,7 +10,7 @@
 using namespace sf;
 using namespace std;
 
-class HealthBar;  // declaración anticipada
+class HealthBar;  // Declaración anticipada
 class Attack;
 
 class Player : public Object{
@@ -20,7 +20,7 @@ public:
 	void SetLife(float perc);
 	float GetLife();
 	
-	// ataques
+	// Ataques
 	bool basicAttack(Player& opponent);
 	void SpecialAttack(Player& opponent);
 	vector<Fireball>& GetFireballs();
