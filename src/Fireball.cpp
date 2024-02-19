@@ -5,7 +5,7 @@ using namespace sf;
 Fireball::Fireball(float x, float y, float speed) : Object("../assets/images/fireball.png"), m_speed(speed), m_velocity() {
 	// Configurar el sprite
 	m_sprite.setPosition(x, y);
-	m_sprite.setScale(0.5f, 0.5f);
+	m_sprite.setScale(0.5, 0.5);
 	m_velocity.x = speed;
 }
 
@@ -14,6 +14,10 @@ void Fireball::Update(float deltaTime) {
 	// Mueve la bola de fuego horizontalmente
 	float movement = m_speed * deltaTime;
 	m_sprite.move(movement, 0);
+	ChangeTexture("../assets/images/fireball.png");
+	if(movement > 0){
+		m_sprite.setScale(-0.5, 0.5);
+	}
 }
 
 FloatRect Fireball::GetBounds() const {

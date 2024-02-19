@@ -94,13 +94,11 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	window.draw(m_spr_ground);
 	window.draw(m_t1);
 	window.draw(m_t2);
-	
 	p1.Draw(window);
 	p2.Draw(window);
 	hb_p1.Draw(window);
 	hb_p2.Draw(window);
 	chrono.Draw(window);
-	
 	
 	// Dibujar las bolas de fuego del jugador 1
 	for (const auto& fireball : p1.GetFireballs()) {
@@ -112,8 +110,8 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		fireball.Draw(window);
 	}
 	
+	// Centrar el mensaje en la pantalla de que el juego termino
 	if (gameEnded) {
-		// Centrar el mensaje en la pantalla
 		sf::Text winnerText;
 		winnerText.setFont(m_f1);
 		winnerText.setFillColor(Color(255, 255, 255));
@@ -123,7 +121,6 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		
 		window.draw(winnerText);
 		window.draw(blackoutRect);
-		
 	}
 	
 	window.display();

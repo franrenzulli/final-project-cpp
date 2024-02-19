@@ -150,9 +150,18 @@ bool Player::basicAttack(Player& opponent ){
 void Player::SpecialAttack(Player& opponent) {
 	// se chequea que el jugador esta vivo en Player::Update()
 	float speed;
-	speed = player_one?500.0f:-500.0f; // velocidad y direccion del disparo
-	Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed);  
-	fireballs.push_back(newFireball);
+	speed = 500.0f; // velocidad y direccion del disparo
+	
+	// Hacemos que las bolas de fuego cambien de direccion segun adonde mira el personaje
+	Vector2f scale = m_sprite.getScale();
+	if(scale.x == -1){
+		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
+		fireballs.push_back(newFireball);
+	}else if(scale.x == 1){
+		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
+		fireballs.push_back(newFireball);
+	}
+	
 }
 
 void Player::SetDeltaTime(sf::Time deltaTime) {
@@ -166,7 +175,6 @@ void Player::SetLife(float perc) {
 float Player::GetLife() {
 	return life_percent;
 }
-
 
 void Player::ValidateScreenLimits() {
 	auto pos = m_sprite.getPosition();
