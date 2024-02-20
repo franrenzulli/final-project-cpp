@@ -12,7 +12,7 @@ Leaderboard::Leaderboard() {
 	m_t1.setFillColor(Color(255,255,255));
 	m_t1.setString("Leaderboard");
 	m_t1.setCharacterSize(40);
-	m_t1.setPosition(600, 100);
+	m_t1.setPosition(650, 100);
 	
 	m_t2.setFont(m_f1);
 	m_t2.setFillColor(Color(255,255,255));
@@ -29,7 +29,7 @@ Leaderboard::Leaderboard() {
 	m_t4.setFillColor(Color(255,255,255,0));
 	m_t4.setString("Presiona ENTER para guardar");
 	m_t4.setCharacterSize(15);
-	m_t4.setPosition(50, 430);
+	m_t4.setPosition(50, 425);
 	
 	m_tex_background.loadFromFile("../assets/images/portada3.png");
 	m_spr_background.setTexture(m_tex_background);
@@ -48,8 +48,11 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 				// Retroceso: eliminar el último carácter
 				currentInput.pop_back();
 			} else if (event.text.unicode != 8 && currentInput.length() < 8) {
-				// Agregar el carácter ingresado
-				currentInput += static_cast<char>(event.text.unicode);
+				
+				// Agregar el carácter ingresado si no es el ENTER
+				if(event.text.unicode != 13){
+					currentInput += static_cast<char>(event.text.unicode);
+				}
 			}
 			m_t2.setString(currentInput);
 		}
