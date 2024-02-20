@@ -108,20 +108,32 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 	m_deltaTime = seconds(0.0166667f);
 	
 	// Actualizar las bolas de fuego
+	// Actualizar las bolas de fuego
 	for (auto& fireball : fireballs) {
 		fireball.Update(m_deltaTime.asSeconds());
+		
+		float fireballDamage = 30.0f;
+		// Verificar colisión con el oponente
+		if (fireball.CheckCollision(opponent)) {
+			// Restar vida al oponente
+			opponent.SetLife(opponent.GetLife() - fireballDamage);
+			// Eliminar la bola de fuego
+			fireball = fireballs.back();  // Copiamos la última bola de fuego al lugar de la actual
+			fireballs.pop_back();         // Eliminamos la última bola de fuego (que ahora está duplicada)
+		}
 	}
 	
 	// Eliminar las bolas de fuego que salieron de la pantalla
 	fireballs.erase(remove_if(fireballs.begin(), fireballs.end(),
-								   [](const Fireball& fireball) {
-									   return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
-								   }), fireballs.end());
-	
+							  [](const Fireball& fireball) {
+								  return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
+							  }), fireballs.end());
+		
 	// Ataque especial
 	bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
 	if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
 		SpecialAttack(opponent);
+		
 	}
 	
 	m_wasSpecialAttackPressed = isSpecialAttackPressed;

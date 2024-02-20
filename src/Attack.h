@@ -10,7 +10,7 @@ class Player;
 class Attack {
 public:
 	Attack(std::string texFilename, float damage, int scores);
-	virtual void PerformAttack(Player& attacker, Player& opponent) =0;
+	virtual void PerformAttack(Player& attacker, Player& opponent) = 0;
 protected:
 	float m_damage;
 	float m_scoresIfSuccessful;
