@@ -22,11 +22,18 @@ public:
 	// Ataques
 	void BasicAttack(Player& opponent);
 	void SpecialAttack(Player& opponent);
+	
 	vector<Fireball>& GetFireballs();
 	
 	bool CheckCollision(const Player& other) const;
 	void SetDeltaTime(sf::Time deltaTime);
 	void ValidateScreenLimits();
+	void WonARound() {
+		m_roundsWon++;
+	}
+	int GetRoundsWon() const {
+		return m_roundsWon;
+	}
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas
@@ -35,6 +42,7 @@ private:
 	bool m_wasSpecialAttackPressed;
 	float m_jumpSpeed;
 	float life_percent = 100.0;
+	int m_roundsWon = 0;
 	
 	// por ahora solo se usa para cambiar las texturas despues de cierto tiempo
 	sf::Clock m_clock;

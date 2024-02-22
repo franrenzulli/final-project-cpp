@@ -36,7 +36,7 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 }
 
 void Player::Update(Player& opponent){ // Input de teclas para movimientos
-	if (life_percent > 0){ // chequea que el jugador este vivo
+	if (GetLife() > 0 && opponent.GetLife() > 0){ // chequea que el jugador este vivo
 		ValidateScreenLimits();
 		if (Keyboard::isKeyPressed(m_left)){
 			m_sprite.setScale(1,1);
@@ -87,60 +87,64 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 				}
 			}
 		}
+		
+		
+		
+		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
+		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
+			BasicAttack(opponent);
+		}
+		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
+			ChangeTexture(player_one?"../assets/images/ken.png":"../assets/images/ryu.png");
+			m_texWasChangedOnBasicAttack =  false;
+		}	
+		
+		/*
+		realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
+		Con esto nos evitamos múltiples ejecuciones del ataque ya que antes cuando apretábamos la letra J
+		El ataque se realizaba muchas veces en simultáneo
+		*/
+		m_wasAttackPressed = isAttackPressed;
+		
+		// --- SPECIAL ATTACK ---
+		
+		// movimiento -> sf::seconds()
+		m_deltaTime = seconds(0.0166667f);
+		
+		// Actualizar las bolas de fuego
+		// Actualizar las bolas de fuego
+		for (auto& fireball : fireballs) {
+			fireball.Update(m_deltaTime.asSeconds());
+			
+			float fireballDamage = 30.0f;
+			// Verificar colisión con el oponente
+			if (fireball.CheckCollision(opponent)) {
+				// Restar vida al oponente
+				opponent.SetLife(opponent.GetLife() - fireballDamage);
+				// Eliminar la bola de fuego
+				fireball = fireballs.back();  // Copiamos la última bola de fuego al lugar de la actual
+				fireballs.pop_back();         // Eliminamos la última bola de fuego (que ahora está duplicada)
+			}
+		}
+		
+		// Eliminar las bolas de fuego que salieron de la pantalla
+		fireballs.erase(remove_if(fireballs.begin(), fireballs.end(),
+								  [](const Fireball& fireball) {
+									  return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
+								  }), fireballs.end());
+		
+		// Ataque especial
+		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
+		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
+			SpecialAttack(opponent);
+			
+		}
+		
+		m_wasSpecialAttackPressed = isSpecialAttackPressed;
 	}
 
 	
-	bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
-	if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
-		BasicAttack(opponent);
-	}
-	if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
-		ChangeTexture(player_one?"../assets/images/ken.png":"../assets/images/ryu.png");
-		m_texWasChangedOnBasicAttack =  false;
-	}	
 	
-	/*
-	realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
-	Con esto nos evitamos múltiples ejecuciones del ataque ya que antes cuando apretábamos la letra J
-	El ataque se realizaba muchas veces en simultáneo
-	*/
-	m_wasAttackPressed = isAttackPressed;
-	
-	// --- SPECIAL ATTACK ---
-	
-	// movimiento -> sf::seconds()
-	m_deltaTime = seconds(0.0166667f);
-	
-	// Actualizar las bolas de fuego
-	// Actualizar las bolas de fuego
-	for (auto& fireball : fireballs) {
-		fireball.Update(m_deltaTime.asSeconds());
-		
-		float fireballDamage = 30.0f;
-		// Verificar colisión con el oponente
-		if (fireball.CheckCollision(opponent)) {
-			// Restar vida al oponente
-			opponent.SetLife(opponent.GetLife() - fireballDamage);
-			// Eliminar la bola de fuego
-			fireball = fireballs.back();  // Copiamos la última bola de fuego al lugar de la actual
-			fireballs.pop_back();         // Eliminamos la última bola de fuego (que ahora está duplicada)
-		}
-	}
-	
-	// Eliminar las bolas de fuego que salieron de la pantalla
-	fireballs.erase(remove_if(fireballs.begin(), fireballs.end(),
-							  [](const Fireball& fireball) {
-								  return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
-							  }), fireballs.end());
-		
-	// Ataque especial
-	bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
-	if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
-		SpecialAttack(opponent);
-		
-	}
-	
-	m_wasSpecialAttackPressed = isSpecialAttackPressed;
 	
 }
 

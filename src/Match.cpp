@@ -2,9 +2,10 @@
 #include "Menu.h"
 #include "Leaderboard.h"
 #include <iostream>
+#include <sstream>
+using namespace std;
 
 Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
-	
 	// Cargamos fondo, textos, fuentes, suelo y posicionamos
 	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
 	
@@ -47,7 +48,6 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 Match::~Match() {}
 
 void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE
-	
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
 	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
@@ -56,39 +56,82 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	}
 }
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
-	
-	// Verificación de muerte
-	if (p1.GetLife() <= 0 || p2.GetLife() <= 0) {
+	// Termina el juego cuando no quedan mas rounds
+	if (m_currentRound > m_totalRounds) {
 		gameEnded = true;
-		winner = (p1.GetLife() <= 0) ? 2 : 1;
-		
-		// Cambiar la opacidad del rectángulo
-		blackoutRect.setFillColor(Color(0, 0, 0, 128));  
-		
-		return;
 	}
-	// Verificacion de tiempo terminado
-	if (chrono.SecondsLeft() == 0) {
+	
+	/* 
+	En caso de terminarse el tiempo, la partida termina
+	solo si no quedan rounds por pelear
+	*/
+	if (chrono.SecondsLeft() == 0 && m_currentRound > m_totalRounds) {
 		gameEnded = true;
-		winner = (p1.GetLife() < p2.GetLife()) ? 2 : 1;
+		winner = (p1.GetRoundsWon() < p2.GetRoundsWon()) ? 2 : 1;
 		
 		// Cambiar la opacidad del rectángulo
-		blackoutRect.setFillColor(Color(0, 0, 0, 128));  
+		blackoutRect.setFillColor(Color(0, 0, 0, 128));  // *****ESTO HACE ALGO???******
 		
 		return;
 	}
 	
-	// Verificación de muerte y mensaje
+	/* 
+	Si muere algun jugador o se termina el tiempo del cronometro, 
+	y todavia quedan rounds por pelear
+	*/
+	if ((p1.GetLife() <= 0 || p2.GetLife() <= 0 || chrono.SecondsLeft() == 0) && m_currentRound <= m_totalRounds) {
+		if (!wasClockAlreadyRestarted) {
+			m_clock.restart();	
+			wasClockAlreadyRestarted = true;
+		}
+		
+		// guarda al ganador del round
+		int roundWinner;
+		
+		if (p1.GetLife() > p2.GetLife()) {
+			p1.WonARound();
+			roundWinner = 1;
+		} else if (p2.GetLife() > p1.GetLife()){
+			p2.WonARound();
+			roundWinner = 2;
+		} else {
+			roundWinner = 0;
+		}
+		
+		if (m_clock.getElapsedTime().asSeconds() < 7) {
+			// elimina todas las bolas de fuego que pueda haber
+			p1.GetFireballs().clear();
+			p2.GetFireballs().clear();
+			// Cambiar la opacidad del rectángulo
+			blackoutRect.setFillColor(Color(0, 0, 0, 128)); 
+			std::stringstream roundWinnerMsg;
+			if (roundWinner != 0)
+				roundWinnerMsg<<"Player "<<roundWinner<<"Won the round #"<<m_currentRound<<"!";
+			else
+				roundWinnerMsg<<"It was a tie!";
+			m_roundWinnerText.setCharacterSize(50);
+			m_roundWinnerText.setString(roundWinnerMsg.str());
+			m_roundWinnerText.setFont(m_f1);
+			m_roundWinnerText.setFillColor(Color(204, 0, 0));
+			m_roundWinnerText.setPosition((1280 - m_roundWinnerText.getLocalBounds().width) / 2, 300);
+		} else {
+			StartNextRound();
+			wasClockAlreadyRestarted = false;
+			m_roundWinnerText.setString("");
+			blackoutRect.setFillColor(Color(0, 0, 0, 0)); 
+		}
+	}
+	
+	
+	// elimina las bolas de fuego al terminar el juego
 	if (gameEnded) {
-		std::cout << "Jugador " << (p1.GetLife() > p2.GetLife() ? "1" : "2") << " ha ganado." << std::endl;
+		p1.GetFireballs().clear();
+		p2.GetFireballs().clear();
 		return;
 	}
 
 	if (chrono.SecondsLeft() > 0) {
 		chrono.Update(); // Actualiza el cronometro
-		if (chrono.SecondsLeft() == 0) {
-			game.SetScene(new Menu());
-		}
 		
 		p1.Update(p2);  // El Jugador 1 se actualiza con el Jugador 2 como oponente
 		p2.Update(p1);  // El Jugador 2 se actualiza con el Jugador 1 como oponente
@@ -133,6 +176,7 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		
 		leaderboardRect.setFillColor(Color(212,43,43));
 		leaderboardRect.setPosition((1280 - leaderboardRect.getLocalBounds().width) / 2, 390);
+		
 		sf::Text buttonText;
 		buttonText.setFont(m_f1);
 		buttonText.setFillColor(Color(255, 255, 255));
@@ -145,7 +189,16 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		window.draw(leaderboardRect);
 		window.draw(buttonText);
 	}
-	
+	window.draw(m_roundWinnerText);
+	window.draw(blackoutRect);
 	window.display();
 }
 
+void Match::StartNextRound() {
+	std::cout<<"Starting a new rounds!"<<std::endl;
+	// Queda un rounds menos
+	m_currentRound++;
+	chrono.Start();
+	p1.SetLife(100.0f);
+	p2.SetLife(100.0f);
+}

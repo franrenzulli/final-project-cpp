@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "HealthBar.h"
 #include "Chrono.h"
+#include <vector>
 
 class Match : public Scene { // Creamos escena Match
 public:
@@ -18,16 +19,18 @@ public:
 	bool GetMatchStatus(){
 		return this->gameEnded;
 	};
+	void StartNextRound();
 	
 private:
 	bool gameEnded;
-	int winner;
+	
 	RectangleShape blackoutRect;
 	RectangleShape leaderboardRect;
 	RectangleShape menuRect;
 	Font m_f1;
 	Text m_t1;
 	Text m_t2;
+	Text m_roundWinnerText;
 	Texture m_tex_background;
 	Texture m_tex_ground;
 	Sprite m_spr_background;
@@ -35,6 +38,15 @@ private:
 	Player p1, p2;
 	HealthBar hb_p1, hb_p2;
 	
-	int roundTime = 2;
-	Chrono chrono = Chrono("../assets/fonts/Kanit.ttf", roundTime);
+	int m_roundTime = 2;
+	int m_totalRounds = 3;
+	int m_currentRound = 1;
+	
+	// indica el ganador definitivo
+	int winner = 0;
+	
+	sf::Clock m_clock;
+	bool wasClockAlreadyRestarted = false;
+	
+	Chrono chrono = Chrono("../assets/fonts/Kanit.ttf", m_roundTime);
 };
