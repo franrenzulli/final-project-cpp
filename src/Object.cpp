@@ -9,7 +9,8 @@ Object::Object(std::string fname) {
 // Metodo para cambiar texturas a los objetos, y actualizar los sprites de los jugadores
 void Object::ChangeTexture(std::string fname){
 	m_texture.loadFromFile(fname);
-	m_sprite.setTexture(m_texture);
+	m_sprite.setTexture(m_texture, true); // true parar
+	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, 0);
 }
 
 // Dibuja los objetos en la escena

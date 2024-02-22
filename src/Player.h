@@ -4,8 +4,7 @@
 #include "Fireball.h"
 #include <SFML/Window/Keyboard.hpp>
 #include<vector>
-#include "Attack.h"
-#include <map>
+#include <SFML/System/Clock.hpp>
 
 using namespace sf;
 using namespace std;
@@ -21,7 +20,7 @@ public:
 	float GetLife();
 	
 	// Ataques
-	bool basicAttack(Player& opponent);
+	void BasicAttack(Player& opponent);
 	void SpecialAttack(Player& opponent);
 	vector<Fireball>& GetFireballs();
 	
@@ -37,8 +36,13 @@ private:
 	float m_jumpSpeed;
 	float life_percent = 100.0;
 	
+	// por ahora solo se usa para cambiar las texturas despues de cierto tiempo
+	sf::Clock m_clock;
+	
 	vector<Fireball> fireballs;
 	sf::Time m_deltaTime;
+	
+	bool m_texWasChangedOnBasicAttack = false;
 };
 
 #endif

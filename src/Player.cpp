@@ -1,8 +1,6 @@
 #include <iostream>
 #include "Player.h"
-#include "HealthBar.h"
 #include <SFML/Window/Keyboard.hpp>
-#include "BasicAttack.h"
 
 using namespace sf;
 using namespace std;
@@ -17,9 +15,6 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 		m_left = Keyboard::Key::A;
 		m_attackBasic = Keyboard::Key::J;
 		m_sprite.setScale(-1,1);
-		
-		// inicializa los ataques
-		auto basicAttack = BasicAttack();
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
 		m_up = Keyboard::Key::Up;
@@ -35,6 +30,7 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 	// variables para el salto
 	m_isJumping = false;
 	m_jumpSpeed = 0.0f;
+	
 	m_wasAttackPressed = false;
 	
 }
@@ -42,14 +38,18 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 void Player::Update(Player& opponent){ // Input de teclas para movimientos
 	if (life_percent > 0){ // chequea que el jugador este vivo
 		ValidateScreenLimits();
-		if(Keyboard::isKeyPressed(m_left)){
+		if (Keyboard::isKeyPressed(m_left)){
 			m_sprite.setScale(1,1);
 			m_sprite.move(-5,0);		
 		}
 		
-		if(Keyboard::isKeyPressed(m_right)){
+		if (Keyboard::isKeyPressed(m_right)){
 			m_sprite.move(+5,0);
 			m_sprite.setScale(-1,1);
+		}
+		
+		if (Keyboard::isKeyPressed(m_down)) {
+			//...
 		}
 		
 		// salto
@@ -89,15 +89,19 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 		}
 	}
 
-	// ahora funciona un lujo
+	
 	bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
-	if (isAttackPressed && !m_wasAttackPressed) {
-		BasicAttack().PerformAttack(*this, opponent);
+	if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
+		BasicAttack(opponent);
 	}
+	if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
+		ChangeTexture(player_one?"../assets/images/ken.png":"../assets/images/ryu.png");
+		m_texWasChangedOnBasicAttack =  false;
+	}	
 	
 	/*
 	realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
-	Con esto nos evitamos múltiples ejecuciones de Attack() ya que antes cuando apretábamos la letra J
+	Con esto nos evitamos múltiples ejecuciones del ataque ya que antes cuando apretábamos la letra J
 	El ataque se realizaba muchas veces en simultáneo
 	*/
 	m_wasAttackPressed = isAttackPressed;
@@ -145,18 +149,21 @@ bool Player::CheckCollision(const Player& other) const {
 }
 
 
-// las funciones de ataques deben retornar true si son exitosos
-bool Player::basicAttack(Player& opponent ){
+void Player::BasicAttack(Player& opponent) {
 	float damage = 10.0f;
+	int scores = 100;
+	m_clock.restart();
+	ChangeTexture(player_one?"../assets/images/kenpatada.png":"../assets/images/ryupatada.png");
+	
+	m_texWasChangedOnBasicAttack = true;
 	
 	if(CheckCollision(opponent)){
-		// le restamos vida al player 2
+		// le restamos vida al oponente
 		opponent.SetLife(opponent.GetLife() - damage);
-	} else if(opponent.CheckCollision(*this)){
-		//le restamos vida al player 1
-		SetLife(GetLife() - damage);
+		std::cout << "¡Ataque efectivo! Causa " << damage << " de daño. " << "+" << scores << "points." << std::endl;
+	} else {
+		std::cout << "El ataque no fue efectivo." << std::endl;
 	}
-	std::cout<<"¡Ataque realizado! Causa " << damage << " de daño." << std::endl;
 }
 
 void Player::SpecialAttack(Player& opponent) {
