@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Player.h"
 #include <SFML/Window/Keyboard.hpp>
+#include <sstream>
 
 using namespace sf;
 using namespace std;
@@ -121,6 +122,7 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 			if (fireball.CheckCollision(opponent)) {
 				// Restar vida al oponente
 				opponent.SetLife(opponent.GetLife() - fireballDamage);
+				m_score += 500;
 				// Eliminar la bola de fuego
 				fireball = fireballs.back();  // Copiamos la última bola de fuego al lugar de la actual
 				fireballs.pop_back();         // Eliminamos la última bola de fuego (que ahora está duplicada)
@@ -164,6 +166,7 @@ void Player::BasicAttack(Player& opponent) {
 	if(CheckCollision(opponent)){
 		// le restamos vida al oponente
 		opponent.SetLife(opponent.GetLife() - damage);
+		m_score += scores;
 		std::cout << "¡Ataque efectivo! Causa " << damage << " de daño. " << "+" << scores << "points." << std::endl;
 	} else {
 		std::cout << "El ataque no fue efectivo." << std::endl;
@@ -211,4 +214,8 @@ vector<Fireball>& Player::GetFireballs() {
 	return fireballs;
 }
 
-
+std::string Player::GetScoreStr() {
+	std::stringstream scoreStr;
+	scoreStr<<m_score;
+	return scoreStr.str();
+}

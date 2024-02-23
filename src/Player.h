@@ -34,6 +34,10 @@ public:
 	int GetRoundsWon() const {
 		return m_roundsWon;
 	}
+	std::string GetScoreStr();
+	int GetScore() {
+		return m_score;
+	}
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas
@@ -42,6 +46,7 @@ private:
 	bool m_wasSpecialAttackPressed;
 	float m_jumpSpeed;
 	float life_percent = 100.0;
+	int m_score = 0;
 	int m_roundsWon = 0;
 	
 	// por ahora solo se usa para cambiar las texturas despues de cierto tiempo

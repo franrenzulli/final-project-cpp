@@ -36,6 +36,17 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	gameEnded = false;
 	winner = 0; 
 	
+	m_scoresP1.setFont(m_f1);
+	m_scoresP1.setCharacterSize(40);
+	m_scoresP1.setFillColor(Color(120, 120, 120));
+	m_scoresP1.setPosition(400,70);
+	
+	m_scoresP2.setFont(m_f1);
+	m_scoresP2.setCharacterSize(40);
+	m_scoresP2.setFillColor(Color(120, 120, 120));
+	m_scoresP2.setPosition(720, 70);
+	
+	
 	blackoutRect.setSize(Vector2f(1280, 720));  // Ajusta el tamaño según la resolución de tu ventana
 	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
 	leaderboardRect.setSize(Vector2f(430, 60)); 
@@ -58,6 +69,9 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	}
 }
 void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
+	m_scoresP1.setString(p1.GetScoreStr());
+	m_scoresP2.setString(p2.GetScoreStr());
+	
 	// Termina el juego cuando no quedan mas rounds
 	if (m_currentRound > m_totalRounds) {
 		gameEnded = true;
@@ -69,7 +83,7 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 	*/
 	if (chrono.SecondsLeft() == 0 && m_currentRound > m_totalRounds) {
 		gameEnded = true;
-		winner = (p1.GetRoundsWon() < p2.GetRoundsWon()) ? 2 : 1;
+		winner = (p1.GetScore() < p2.GetScore()) ? 2 : 1;
 			
 		// Cambiar la opacidad del rectángulo
 		blackoutRect.setFillColor(Color(0, 0, 0, 128));  // *****ESTO HACE ALGO???******
@@ -166,6 +180,9 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	hb_p1.Draw(window);
 	hb_p2.Draw(window);
 	chrono.Draw(window);
+	window.draw(m_scoresP1);
+	window.draw(m_scoresP2);
+	
 	
 	// Dibujar las bolas de fuego del jugador 1
 	for (const auto& fireball : p1.GetFireballs()) {
