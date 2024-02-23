@@ -183,8 +183,27 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		winnerText.setFont(m_f1);
 		winnerText.setFillColor(Color(255, 255, 255));
 		winnerText.setCharacterSize(50);
-		winnerText.setString("Player " + to_string(winner) + " has won!");
+		
+		// LOGICA PARA GUARDAR EL GANADOR.
+		if (winner != 0) {
+			winnerText.setString("Player " + to_string(winner) + " has won the match!");
+		} else {
+			// Determinar el jugador que gano mas rounds
+			if (p1.GetRoundsWon() > p2.GetRoundsWon()) {
+				winner = 1;
+			} else if (p2.GetRoundsWon() > p1.GetRoundsWon()) {
+				winner = 2;
+			}
+			
+			if (winner != 0) {
+				winnerText.setString("Player " + to_string(winner) + " has won the match!");
+			} else {
+				winnerText.setString("It's a tie!");
+			}
+		}
+		
 		winnerText.setPosition((1280 - winnerText.getLocalBounds().width) / 2, 300);
+		
 		
 		leaderboardRect.setFillColor(Color(212,43,43));
 		leaderboardRect.setPosition((1280 - leaderboardRect.getLocalBounds().width) / 2, 390);
