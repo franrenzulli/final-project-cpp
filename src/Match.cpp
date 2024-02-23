@@ -3,6 +3,8 @@
 #include "Leaderboard.h"
 #include <iostream>
 #include <sstream>
+#include <SFML/Window/Keyboard.hpp>
+
 using namespace std;
 
 Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
@@ -68,7 +70,7 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 	if (chrono.SecondsLeft() == 0 && m_currentRound > m_totalRounds) {
 		gameEnded = true;
 		winner = (p1.GetRoundsWon() < p2.GetRoundsWon()) ? 2 : 1;
-		
+			
 		// Cambiar la opacidad del rectángulo
 		blackoutRect.setFillColor(Color(0, 0, 0, 128));  // *****ESTO HACE ALGO???******
 		
@@ -104,13 +106,23 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 			p2.GetFireballs().clear();
 			// Cambiar la opacidad del rectángulo
 			blackoutRect.setFillColor(Color(0, 0, 0, 128)); 
-			std::stringstream roundWinnerMsg;
-			if (roundWinner != 0)
-				roundWinnerMsg<<"Player "<<roundWinner<<"Won the round #"<<m_currentRound<<"!";
+			//stringstream roundWinnerMsg;
+			
+			if (roundWinner != 0){
+				// TODO: IMPROVE
+				//roundWinnerMsg<<"Player "<<roundWinner<<"Won the round #"<<m_currentRound<<"!";
+				
+				if(Keyboard::isKeyPressed(Keyboard::Return)){
+					StartNextRound();
+					m_roundWinnerText.setString("");
+
+				}
+				
+			}
 			else
-				roundWinnerMsg<<"It was a tie!";
+				//roundWinnerMsg<<"It was a tie!";
 			m_roundWinnerText.setCharacterSize(50);
-			m_roundWinnerText.setString(roundWinnerMsg.str());
+			//m_roundWinnerText.setString(roundWinnerMsg.str());
 			m_roundWinnerText.setFont(m_f1);
 			m_roundWinnerText.setFillColor(Color(204, 0, 0));
 			m_roundWinnerText.setPosition((1280 - m_roundWinnerText.getLocalBounds().width) / 2, 300);
@@ -122,11 +134,11 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		}
 	}
 	
-	
 	// elimina las bolas de fuego al terminar el juego
 	if (gameEnded) {
 		p1.GetFireballs().clear();
 		p2.GetFireballs().clear();
+		
 		return;
 	}
 
@@ -167,11 +179,11 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	
 	// Centrar el mensaje en la pantalla de que el juego termino
 	if (gameEnded) {
-		sf::Text winnerText;
+		Text winnerText;
 		winnerText.setFont(m_f1);
 		winnerText.setFillColor(Color(255, 255, 255));
 		winnerText.setCharacterSize(50);
-		winnerText.setString("Player " + std::to_string(winner) + " has won!");
+		winnerText.setString("Player " + to_string(winner) + " has won!");
 		winnerText.setPosition((1280 - winnerText.getLocalBounds().width) / 2, 300);
 		
 		leaderboardRect.setFillColor(Color(212,43,43));
@@ -201,4 +213,11 @@ void Match::StartNextRound() {
 	chrono.Start();
 	p1.SetLife(100.0f);
 	p2.SetLife(100.0f);
+	
+	// Borrar el mensaje y permitir que los jugadores se muevan
+	m_roundWinnerText.setString("");
+	blackoutRect.setFillColor(Color(0, 0, 0, 0));
+	
+	// Permitir que los jugadores se muevan
+
 }
