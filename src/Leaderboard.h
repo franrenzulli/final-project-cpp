@@ -7,7 +7,7 @@ using namespace std;
 
 class Leaderboard : public Scene { // Creamos la escena Leaderboard
 public:
-	Leaderboard();
+	Leaderboard(int winnerPoints);
 	~Leaderboard();
 	
 	void ProcessEvents(Game &game, Event &event) override;
@@ -19,6 +19,7 @@ private:
 	Text m_t2; // Texto donde se escribira el nombre 
 	Text m_t3;
 	Text m_t4;
+	Text m_t5; // Texto donde se escribiran los puntos
 	string currentInput;
 	Texture m_tex_background;
 	Sprite m_spr_background;

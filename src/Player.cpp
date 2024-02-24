@@ -89,8 +89,6 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 			}
 		}
 		
-		
-		
 		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
 		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
 			BasicAttack(opponent);
@@ -218,4 +216,14 @@ std::string Player::GetScoreStr() {
 	std::stringstream scoreStr;
 	scoreStr<<m_score;
 	return scoreStr.str();
+}
+
+void Player::restart(bool player_one){
+	if(player_one){
+		m_sprite.setScale(-1,1);
+		m_sprite.setPosition(400,300);
+	}else{
+		m_sprite.setScale(1,1);
+		m_sprite.setPosition(1000,300);
+	}
 }

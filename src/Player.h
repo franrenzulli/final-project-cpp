@@ -18,6 +18,7 @@ public:
 	void Update(Player& opponent);
 	void SetLife(float perc);
 	float GetLife();
+	void restart(bool player_one);
 	
 	// Ataques
 	void BasicAttack(Player& opponent);

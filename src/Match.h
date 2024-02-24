@@ -45,6 +45,7 @@ private:
 	
 	// indica el ganador definitivo
 	int winner = 0;
+	int winnerPoints;
 	
 	sf::Clock m_clock;
 	bool wasClockAlreadyRestarted = false;

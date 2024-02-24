@@ -3,7 +3,7 @@
 #include "Menu.h"
 #include <iostream>
 
-Leaderboard::Leaderboard() {
+Leaderboard::Leaderboard(int winnerPoints) {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
 	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
@@ -17,7 +17,7 @@ Leaderboard::Leaderboard() {
 	m_t2.setFont(m_f1);
 	m_t2.setFillColor(Color(255,255,255));
 	m_t2.setCharacterSize(40);
-	m_t2.setPosition(50, 350);
+	m_t2.setPosition(50, 350);	
 	
 	m_t3.setFont(m_f1);
 	m_t3.setFillColor(Color(255,255,255));
@@ -30,6 +30,12 @@ Leaderboard::Leaderboard() {
 	m_t4.setString("Presiona ENTER para guardar");
 	m_t4.setCharacterSize(15);
 	m_t4.setPosition(50, 425);
+	
+	m_t5.setFont(m_f1);
+	m_t5.setFillColor(Color(255,255,255));
+	m_t5.setString(to_string(winnerPoints) + " points");
+	m_t5.setCharacterSize(15);
+	m_t5.setPosition(50, 475);
 	
 	m_tex_background.loadFromFile("../assets/images/portada3.png");
 	m_spr_background.setTexture(m_tex_background);
@@ -74,6 +80,7 @@ void Leaderboard::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.draw(m_t2);
 	window.draw(m_t3);
 	window.draw(m_t4);
+	window.draw(m_t5);
 	window.display();
 }
 

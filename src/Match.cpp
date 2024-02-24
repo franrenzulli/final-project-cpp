@@ -54,7 +54,7 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	menuRect.setSize(Vector2f(480,50));
 	menuRect.setFillColor(Color(212,43,43)); 
 	menuRect.setPosition(0,670);
-	chrono.Start();
+	chrono.Start(); // Empeiza el cronometro
 }
 
 
@@ -64,7 +64,7 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
 	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
-		game.SetScene(new Leaderboard()); // Seteamos la escena del leaderboard
+		game.SetScene(new Leaderboard(winnerPoints)); // Seteamos la escena del leaderboard
 		
 	}
 }
@@ -148,11 +148,10 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		}
 	}
 	
-	// elimina las bolas de fuego al terminar el juego
+	// Elimina las bolas de fuego al terminar el juego
 	if (gameEnded) {
 		p1.GetFireballs().clear();
 		p2.GetFireballs().clear();
-		
 		return;
 	}
 
@@ -196,10 +195,12 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	
 	// Centrar el mensaje en la pantalla de que el juego termino
 	if (gameEnded) {
+		blackoutRect.setFillColor(Color(0, 0, 0, 128));
 		Text winnerText;
 		winnerText.setFont(m_f1);
 		winnerText.setFillColor(Color(255, 255, 255));
-		winnerText.setCharacterSize(50);
+		winnerText.setCharacterSize(40);
+		
 		
 		// LOGICA PARA GUARDAR EL GANADOR.
 		if (winner != 0) {
@@ -208,8 +209,10 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 			// Determinar el jugador que gano mas rounds
 			if (p1.GetRoundsWon() > p2.GetRoundsWon()) {
 				winner = 1;
+				winnerPoints = p1.GetScore();
 			} else if (p2.GetRoundsWon() > p1.GetRoundsWon()) {
 				winner = 2;
+				winnerPoints = p2.GetScore();
 			}
 			
 			if (winner != 0) {
@@ -237,20 +240,22 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 		window.draw(leaderboardRect);
 		window.draw(buttonText);
 	}
-	window.draw(m_roundWinnerText);
 	window.draw(blackoutRect);
+	window.draw(m_roundWinnerText);
 	window.display();
 }
 
-void Match::StartNextRound() {
+void Match::StartNextRound() { // Al comenzar nuevo round
 	std::cout<<"Starting a new rounds!"<<std::endl;
-	// Queda un rounds menos
-	m_currentRound++;
-	chrono.Start();
-	p1.SetLife(100.0f);
-	p2.SetLife(100.0f);
 	
-	// Borrar el mensaje y permitir que los jugadores se muevan
+	m_currentRound++; // Pasamos al siguiente round
+	chrono.Start(); // Empieza el cronometro
+	p1.SetLife(100.0f); // Actualizamos vida 
+	p2.SetLife(100.0f);
+	p1.restart(true); // Ponemos a los jugadores en su posicion inicial
+	p2.restart(false);
+	
+	// Borrar el mensaje 
 	m_roundWinnerText.setString("");
 	blackoutRect.setFillColor(Color(0, 0, 0, 0));
 	
