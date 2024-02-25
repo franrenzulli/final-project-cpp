@@ -7,10 +7,13 @@
 #include "Menu.h"
 
 
+#include <cstring>
+#include <algorithm>
+#include <sstream>
 using namespace sf;
 using namespace std;
 
-Leaderboard::Leaderboard(int winnerPoints) {
+Leaderboard::Leaderboard(string fname, int winnerPoints) : m_filename(fname), m_winnerPoints(winnerPoints) {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
 	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
@@ -44,16 +47,41 @@ Leaderboard::Leaderboard(int winnerPoints) {
 	m_t5.setCharacterSize(15);
 	m_t5.setPosition(50, 475);
 	
+	m_name.setFont(m_f1);
+	m_name.setFillColor(Color(255,255,255));
+	m_name.setCharacterSize(20);
+	m_name.setPosition(600, 150);
+	m_name.setString("name");
+	
+	m_points.setFont(m_f1);
+	m_points.setFillColor(Color(255,255,255));
+	m_points.setCharacterSize(20);
+	m_points.setPosition(750, 150);
+	m_points.setString("points");
+	
+	m_totalWins.setFont(m_f1);
+	m_totalWins.setFillColor(Color(255,255,255));
+	m_totalWins.setCharacterSize(20);
+	m_totalWins.setPosition(900, 150);
+	m_totalWins.setString("total wins");
+	
+	
+	
 	m_tex_background.loadFromFile("../assets/images/portada3.png");
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_background.setScale(1.1, 1.03);
 	
+	
+	LoadDataFromFile(m_filename);
 }
 
-Leaderboard::~Leaderboard() {}
+Leaderboard::~Leaderboard() {
+	SaveDataToFile(m_filename);
+}
 
 void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
-	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
+	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+		SaveDataToFile(m_filename);
 		game.SetScene(new Menu());
 	}else if (event.type == Event::TextEntered) { // Escribir tu nombre en la pantalla
 		if (event.text.unicode < 128) {
@@ -69,15 +97,29 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 			}
 			m_t2.setString(currentInput);
 			
+			char nameInput[12];
+			strcpy(nameInput, currentInput.c_str());
+			
 			// Agregar manejo para la tecla Enter
 			if (event.text.unicode == 13 && currentInput.length() > 0) {
-				// Guardar nombre y puntaje en las variables de la clase
+				auto it = find_if(m_leaders.begin(), m_leaders.end(), [nameInput] (const PlayerData& p){
+					return p.name == nameInput;
+				});
 				
-				// Guardar en un archivo binario
-				SaveDataToFile("leaderboard.bin", m_t2.getString().toAnsiString(), stoi(m_t5.getString().toAnsiString()));
-				
+				if (it == m_leaders.end()) {
+					cout<<nameInput<<": no encontrado"<<endl;
+					// si no existe, agrega un nuevo jugador al leaderboard
+					PlayerData newPlayer;
+					strcpy(newPlayer.name, currentInput.c_str());
+					newPlayer.score = m_winnerPoints;
+					newPlayer.totalWins = 1;
+					m_leaders.push_back(newPlayer);
+				} else {
+					// sino, actualizar datos
+					it->score += m_winnerPoints;
+					it->totalWins++;
+				}
 			}
-			
 		}
 		// Hacer aparecer o desaparecer el texto de guardar
 		if(currentInput.length() > 0){
@@ -88,8 +130,21 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 	}
 }
 
-void Leaderboard::Update(Game &game) {}
-
+void Leaderboard::Update(Game &game) {
+	stringstream names, points, wins;
+	names<<"name"<<endl;
+	points<<"points"<<endl;
+	wins<<"wins"<<endl;
+	
+	for (auto& p : m_leaders) {
+		names<<string(p.name)<<endl;
+		points<<p.score<<endl;
+		wins<<p.totalWins<<endl;
+	}
+	m_name.setString(names.str());
+	m_points.setString(points.str());
+	m_totalWins.setString(wins.str());
+}
 void Leaderboard::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.clear({0,0,0});
 	window.draw(m_spr_background);
@@ -98,27 +153,32 @@ void Leaderboard::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.draw(m_t3);
 	window.draw(m_t4);
 	window.draw(m_t5);
+	window.draw(m_name);
+	window.draw(m_points);
+	window.draw(m_totalWins);
 	window.display();
 }
 
 
-void Leaderboard::SaveDataToFile(const string &filename, const string &name, int points) {
-	ofstream file(filename, ios::binary | ios::app);
-	
+
+
+
+void Leaderboard::SaveDataToFile(const string& filename) {
+	ofstream file(filename, ios::binary);
 	if (file.is_open()) {
-		// Guardar longitud del nombre
-		size_t nameSize = name.size() + 1; // +1 para incluir el null-terminator
-		file.write(reinterpret_cast<const char*>(&nameSize), sizeof(size_t));
-		
-		// Guardar nombre con null-terminator
-		file.write(name.c_str(), nameSize);
-		
-		// Guardar puntos
-		file.write(reinterpret_cast<const char*>(&points), sizeof(int));
-		
+		for (auto& p : m_leaders) {
+			file.write(reinterpret_cast<char*>(&p), sizeof(p));
+		}
 		file.close();
 	} else {
 		cerr << "Error al abrir el archivo: " << filename << endl;
 	}
 }
 
+void Leaderboard::LoadDataFromFile(const string& filename) {
+	ifstream file(filename, ios::binary);
+	PlayerData p;
+	while (file.read(reinterpret_cast<char*>(&p), sizeof(p))) {
+		m_leaders.push_back(p);
+	}
+}

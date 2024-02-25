@@ -64,7 +64,7 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
 	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
-		game.SetScene(new Leaderboard(winnerPoints)); // Seteamos la escena del leaderboard
+		game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints)); // Seteamos la escena del leaderboard
 		
 	}
 }
