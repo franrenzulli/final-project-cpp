@@ -1,7 +1,14 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
 #include "Leaderboard.h"
 #include "Match.h"
 #include "Menu.h"
-#include <iostream>
+
+
+using namespace sf;
+using namespace std;
 
 Leaderboard::Leaderboard(int winnerPoints) {
 	
@@ -48,7 +55,7 @@ Leaderboard::~Leaderboard() {}
 void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
-	}else if (event.type == sf::Event::TextEntered) { // Escribir tu nombre en la pantalla
+	}else if (event.type == Event::TextEntered) { // Escribir tu nombre en la pantalla
 		if (event.text.unicode < 128) {
 			if (event.text.unicode == 8 && !currentInput.empty()) {
 				// Retroceso: eliminar el último carácter
@@ -61,6 +68,16 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 				}
 			}
 			m_t2.setString(currentInput);
+			
+			// Agregar manejo para la tecla Enter
+			if (event.text.unicode == 13 && currentInput.length() > 0) {
+				// Guardar nombre y puntaje en las variables de la clase
+				
+				// Guardar en un archivo binario
+				SaveDataToFile("leaderboard.bin", m_t2.getString().toAnsiString(), stoi(m_t5.getString().toAnsiString()));
+				
+			}
+			
 		}
 		// Hacer aparecer o desaparecer el texto de guardar
 		if(currentInput.length() > 0){
@@ -84,4 +101,24 @@ void Leaderboard::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.display();
 }
 
+
+void Leaderboard::SaveDataToFile(const string &filename, const string &name, int points) {
+	ofstream file(filename, ios::binary | ios::app);
+	
+	if (file.is_open()) {
+		// Guardar longitud del nombre
+		size_t nameSize = name.size() + 1; // +1 para incluir el null-terminator
+		file.write(reinterpret_cast<const char*>(&nameSize), sizeof(size_t));
+		
+		// Guardar nombre con null-terminator
+		file.write(name.c_str(), nameSize);
+		
+		// Guardar puntos
+		file.write(reinterpret_cast<const char*>(&points), sizeof(int));
+		
+		file.close();
+	} else {
+		cerr << "Error al abrir el archivo: " << filename << endl;
+	}
+}
 

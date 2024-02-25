@@ -13,6 +13,8 @@ public:
 	void ProcessEvents(Game &game, Event &event) override;
 	void Update(Game &game) override;
 	void Draw(RenderWindow &window) override;
+	void SaveDataToFile(const string &filename, const string &name, int points);
+	void ShowLeaderboard(const string &filename);
 private:
 	Font m_f1;
 	Text m_t1;
