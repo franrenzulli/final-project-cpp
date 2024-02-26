@@ -35,6 +35,7 @@ private:
 	int m_winnerPoints;
 	vector<PlayerData> m_leaders;
 	string m_filename;
+	bool m_scoreSaved;
 };
 
 

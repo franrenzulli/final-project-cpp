@@ -50,7 +50,7 @@ path=Fireball.cpp
 cursor=9:1
 [source]
 path=Leaderboard.cpp
-cursor=107:4
+cursor=96:5
 open=true
 [header]
 path=Game.h
@@ -81,7 +81,7 @@ path=Fireball.h
 cursor=14:41
 [header]
 path=Leaderboard.h
-cursor=30:35
+cursor=37:19
 open=true
 [config]
 name=Debug_Win32

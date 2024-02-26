@@ -73,6 +73,7 @@ Leaderboard::Leaderboard(string fname, int winnerPoints) : m_filename(fname), m_
 	
 	
 	LoadDataFromFile(m_filename);
+	m_scoreSaved = false;
 }
 
 Leaderboard::~Leaderboard() {
@@ -96,28 +97,27 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 				}
 			}
 			m_t2.setString(currentInput);
-			
-			char nameInput[12];
-			strcpy(nameInput, currentInput.c_str());
-			
+			string input = currentInput;
 			// Agregar manejo para la tecla Enter
-			if (event.text.unicode == 13 && currentInput.length() > 0) {
-				auto it = find_if(m_leaders.begin(), m_leaders.end(), [nameInput] (const PlayerData& p){
-					return p.name == nameInput;
+			if (event.text.unicode == 13 && currentInput.length() > 0 && !m_scoreSaved) {
+				auto it = find_if(m_leaders.begin(), m_leaders.end(), [input] (const PlayerData& p){
+					return string(p.name) == input;
 				});
 				
 				if (it == m_leaders.end()) {
-					cout<<nameInput<<": no encontrado"<<endl;
+					cout<<input<<": no encontrado"<<endl;
 					// si no existe, agrega un nuevo jugador al leaderboard
 					PlayerData newPlayer;
 					strcpy(newPlayer.name, currentInput.c_str());
 					newPlayer.score = m_winnerPoints;
 					newPlayer.totalWins = 1;
 					m_leaders.push_back(newPlayer);
+					m_scoreSaved = true;
 				} else {
 					// sino, actualizar datos
 					it->score += m_winnerPoints;
 					it->totalWins++;
+					m_scoreSaved = true;
 				}
 			}
 		}
