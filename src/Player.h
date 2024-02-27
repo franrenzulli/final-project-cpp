@@ -5,6 +5,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include<vector>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 using namespace sf;
 using namespace std;
@@ -35,7 +37,7 @@ public:
 	int GetRoundsWon() const {
 		return m_roundsWon;
 	}
-	std::string GetScoreStr();
+	string GetScoreStr();
 	int GetScore() {
 		return m_score;
 	}
@@ -49,14 +51,13 @@ private:
 	float life_percent = 100.0;
 	int m_score = 0;
 	int m_roundsWon = 0;
-	
-	// por ahora solo se usa para cambiar las texturas despues de cierto tiempo
-	sf::Clock m_clock;
-	
+	sf::Clock m_clock; // para cambiar las texturas despues de cierto tiempo
 	vector<Fireball> fireballs;
 	sf::Time m_deltaTime;
-	
 	bool m_texWasChangedOnBasicAttack = false;
+	
+	SoundBuffer m_kickSoundBuff, m_jumpSoundBuff, m_fireballSoundBuff;
+	Sound m_jumpSound, m_kickSound, m_fireballSound;
 };
 
 #endif

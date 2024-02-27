@@ -2,6 +2,7 @@
 #include "Player.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <sstream>
+#include <SFML/Audio/Sound.hpp>
 
 using namespace sf;
 using namespace std;
@@ -34,10 +35,18 @@ Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png"
 	
 	m_wasAttackPressed = false;
 	
+	m_kickSoundBuff.loadFromFile("../assets/sounds/kick.wav");
+	m_jumpSoundBuff.loadFromFile("../assets/sounds/jump.wav");
+	m_fireballSoundBuff.loadFromFile("../assets/sounds/fireball.wav");
+	
+	m_kickSound.setBuffer(m_kickSoundBuff);
+	m_jumpSound.setBuffer(m_jumpSoundBuff);
+	m_fireballSound.setBuffer(m_fireballSoundBuff);
 }
 
-void Player::Update(Player& opponent){ // Input de teclas para movimientos
+void Player::Update(Player& opponent){
 	if (GetLife() > 0 && opponent.GetLife() > 0){ // chequea que el jugador este vivo
+		// Input de teclas para movimientos
 		ValidateScreenLimits();
 		if (Keyboard::isKeyPressed(m_left)){
 			m_sprite.setScale(1,1);
@@ -57,6 +66,7 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 		if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
 			m_isJumping = true;
 			m_jumpSpeed = -20.0f;
+			m_jumpSound.play();
 		}
 		
 		// movimiento vertical
@@ -88,10 +98,11 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 				}
 			}
 		}
-		
+
 		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
 		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
 			BasicAttack(opponent);
+			m_kickSound.play();
 		}
 		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
 			ChangeTexture(player_one?"../assets/images/ken.png":"../assets/images/ryu.png");
@@ -109,8 +120,7 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 		
 		// movimiento -> sf::seconds()
 		m_deltaTime = seconds(0.0166667f);
-		
-		// Actualizar las bolas de fuego
+
 		// Actualizar las bolas de fuego
 		for (auto& fireball : fireballs) {
 			fireball.Update(m_deltaTime.asSeconds());
@@ -133,19 +143,16 @@ void Player::Update(Player& opponent){ // Input de teclas para movimientos
 									  return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
 								  }), fireballs.end());
 		
+		
 		// Ataque especial
 		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
 		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
 			SpecialAttack(opponent);
-			
+			m_fireballSound.play();
 		}
 		
 		m_wasSpecialAttackPressed = isSpecialAttackPressed;
 	}
-
-	
-	
-	
 }
 
 bool Player::CheckCollision(const Player& other) const {

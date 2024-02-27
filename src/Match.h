@@ -7,6 +7,8 @@
 #include "HealthBar.h"
 #include "Chrono.h"
 #include <vector>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Audio/Sound.hpp>
 
 class Match : public Scene { // Creamos escena Match
 public:
@@ -38,6 +40,8 @@ private:
 	Sprite m_spr_ground;
 	Player p1, p2;
 	HealthBar hb_p1, hb_p2;
+	SoundBuffer m_gameStartSoundBuff;
+	Sound m_gameStartSound;
 	
 	int m_roundTime = 2;
 	int m_totalRounds = 3;

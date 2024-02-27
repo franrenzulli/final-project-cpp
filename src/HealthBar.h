@@ -1,6 +1,8 @@
 #ifndef HEALTHBAR_H
 #define HEALTHBAR_H
 #include "Object.h"
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 class Player;  // declaración anticipada
 
@@ -12,7 +14,10 @@ public:
 private:
 	Texture bg_tex, frame_tex, lifes_tex;
 	Sprite bg_spr, frame_spr, lifes_spr;
+	SoundBuffer m_gameOverSoundBuff;
+	Sound m_gameOverSound;
 	bool player_one;
+	
 };
 
 #endif

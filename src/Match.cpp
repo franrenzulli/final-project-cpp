@@ -54,7 +54,13 @@ Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
 	menuRect.setSize(Vector2f(480,50));
 	menuRect.setFillColor(Color(212,43,43)); 
 	menuRect.setPosition(0,670);
-	chrono.Start(); // Empeiza el cronometro
+	
+	m_gameStartSoundBuff.loadFromFile("../assets/sounds/game_start.wav");
+	m_gameStartSound.setBuffer(m_gameStartSoundBuff);
+	
+	
+	chrono.Start(); // Empieza el cronometro
+	m_gameStartSound.play();
 }
 
 
@@ -68,7 +74,8 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 		
 	}
 }
-void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse y atacar
+void Match::Update(Game &game) {
+	// setea los contadores de puntos
 	m_scoresP1.setString(p1.GetScoreStr());
 	m_scoresP2.setString(p2.GetScoreStr());
 	
@@ -91,10 +98,8 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		return;
 	}
 	
-	/* 
-	Si muere algun jugador o se termina el tiempo del cronometro, 
-	y todavia quedan rounds por pelear
-	*/
+	/* Si muere algun jugador o se termina el tiempo del cronometro, 
+	y todavia quedan rounds por pelear*/
 	if ((p1.GetLife() <= 0 || p2.GetLife() <= 0 || chrono.SecondsLeft() == 0) && m_currentRound <= m_totalRounds) {
 		if (!wasClockAlreadyRestarted) {
 			m_clock.restart();	
@@ -129,11 +134,8 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 				if(Keyboard::isKeyPressed(Keyboard::Return)){
 					StartNextRound();
 					m_roundWinnerText.setString("");
-
 				}
-				
-			}
-			else
+			} else
 				//roundWinnerMsg<<"It was a tie!";
 			m_roundWinnerText.setCharacterSize(50);
 			//m_roundWinnerText.setString(roundWinnerMsg.str());
@@ -148,8 +150,9 @@ void Match::Update(Game &game) { // Habilitamos que los jugadores puedan moverse
 		}
 	}
 	
-	// Elimina las bolas de fuego al terminar el juego
+	
 	if (gameEnded) {
+		// Elimina las bolas de fuego al terminar el juego
 		p1.GetFireballs().clear();
 		p2.GetFireballs().clear();
 		return;
