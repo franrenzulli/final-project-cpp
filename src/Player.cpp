@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Player.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <sstream>
@@ -34,8 +33,8 @@ Player::Player(bool player_one, Texture &tex) : Object(tex) {
 		m_left = Keyboard::Key::Left;
 		m_attackBasic = Keyboard::Key::K;
 		
-		m_jumpTex.loadFromFile("../assets/images/kenjumping.png");
-		m_basicAtkTex.loadFromFile("../assets/images/kenpatada.png");
+		m_jumpTex.loadFromFile("../assets/images/ryujumping.png");
+		m_basicAtkTex.loadFromFile("../assets/images/ryupatada.png");
 	}
 	
 	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
@@ -50,10 +49,6 @@ Player::Player(bool player_one, Texture &tex) : Object(tex) {
 	m_kickSoundBuff.loadFromFile("../assets/sounds/kick.wav");
 	m_jumpSoundBuff.loadFromFile("../assets/sounds/jump.wav");
 	m_fireballSoundBuff.loadFromFile("../assets/sounds/fireball.wav");
-	
-	m_kickSound.setBuffer(m_kickSoundBuff);
-	m_jumpSound.setBuffer(m_jumpSoundBuff);
-	m_fireballSound.setBuffer(m_fireballSoundBuff);
 }
 
 void Player::Update(Player& opponent){
@@ -76,9 +71,12 @@ void Player::Update(Player& opponent){
 		
 		// salto
 		if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
+			m_soundEffect.setBuffer(m_jumpSoundBuff);
+			
 			m_isJumping = true;
 			m_jumpSpeed = -20.0f;
-			m_jumpSound.play();
+			
+			m_soundEffect.play();
 		}
 		
 		// movimiento vertical
@@ -104,19 +102,17 @@ void Player::Update(Player& opponent){
 
 		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
 		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
+			m_soundEffect.setBuffer(m_kickSoundBuff);
 			BasicAttack(opponent);
-			m_kickSound.play();
+			m_soundEffect.play();
 		}
 		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
 			ChangeTexture(m_normalTex);
 			m_texWasChangedOnBasicAttack =  false;
 		}	
 		
-		/*
-		realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
-		Con esto nos evitamos múltiples ejecuciones del ataque ya que antes cuando apretábamos la letra J
-		El ataque se realizaba muchas veces en simultáneo
-		*/
+		
+		// realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
 		m_wasAttackPressed = isAttackPressed;
 		
 		// --- SPECIAL ATTACK ---
@@ -150,8 +146,9 @@ void Player::Update(Player& opponent){
 		// Ataque especial
 		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
 		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
+			m_soundEffect.setBuffer(m_fireballSoundBuff);
 			SpecialAttack(opponent);
-			m_fireballSound.play();
+			m_soundEffect.play();
 		}
 		
 		m_wasSpecialAttackPressed = isSpecialAttackPressed;
@@ -175,9 +172,6 @@ void Player::BasicAttack(Player& opponent) {
 		// le restamos vida al oponente
 		opponent.SetLife(opponent.GetLife() - damage);
 		m_score += scores;
-		std::cout << "¡Ataque efectivo! Causa " << damage << " de daño. " << "+" << scores << "points." << std::endl;
-	} else {
-		std::cout << "El ataque no fue efectivo." << std::endl;
 	}
 }
 

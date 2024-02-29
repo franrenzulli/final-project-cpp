@@ -1,5 +1,4 @@
-#ifndef CHRONO_H
-#define CHRONO_H
+#pragma once
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/System/Clock.hpp>
@@ -22,6 +21,3 @@ private:
 	Text chronoText;
 	int minutes;
 };
-
-#endif
-

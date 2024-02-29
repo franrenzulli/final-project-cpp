@@ -1,5 +1,5 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#pragma once
+
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <string>
@@ -15,5 +15,3 @@ public:
 protected:
 	Sprite m_sprite;
 };
-
-#endif

@@ -1,6 +1,5 @@
-// En el archivo Fireball.h
-#ifndef FIREBALL_H
-#define FIREBALL_H
+#pragma once
+
 #include "Object.h"
 
 class Player;
@@ -19,5 +18,3 @@ private:
 	float m_speed;
 	Vector2f m_velocity;
 };
-
-#endif

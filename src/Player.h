@@ -1,5 +1,5 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
+
 #include "Object.h"
 #include "Fireball.h"
 #include <SFML/Window/Keyboard.hpp>
@@ -52,6 +52,9 @@ private:
 	// texturas miscelaneas
 	Texture m_fireballTex;
 	
+	SoundBuffer m_kickSoundBuff, m_jumpSoundBuff, m_fireballSoundBuff;
+	Sound m_soundEffect;
+	
 	bool m_isJumping;
 	bool m_wasAttackPressed;
 	bool m_wasSpecialAttackPressed;
@@ -63,10 +66,5 @@ private:
 	vector<Fireball> fireballs;
 	sf::Time m_deltaTime;
 	bool m_texWasChangedOnBasicAttack = false;
-	
-	SoundBuffer m_kickSoundBuff, m_jumpSoundBuff, m_fireballSoundBuff;
-	Sound m_jumpSound, m_kickSound, m_fireballSound;
 };
-
-#endif
 

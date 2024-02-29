@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include <vector>
 
@@ -10,6 +9,7 @@
 #include <cstring>
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 using namespace sf;
 using namespace std;
 

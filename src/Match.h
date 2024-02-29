@@ -43,8 +43,9 @@ private:
 	Player p1 = Player(true, m_playerOneTex);
 	Player p2 = Player(false, m_playerTwoTex);
 	HealthBar hb_p1, hb_p2;
+	
 	SoundBuffer m_gameStartSoundBuff;
-	Sound m_gameStartSound;
+	Sound m_soundEffect;
 	
 	int m_roundTime = 2;
 	int m_totalRounds = 3;

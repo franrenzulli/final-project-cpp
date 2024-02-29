@@ -1,6 +1,5 @@
 #include "HealthBar.h"
 #include "Player.h"
-#include <iostream>
 
 HealthBar::HealthBar(bool player1) : player_one(player1) {
 	bg_tex.loadFromFile("../assets/images/no_health.png");

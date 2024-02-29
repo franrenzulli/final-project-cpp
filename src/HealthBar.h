@@ -1,5 +1,5 @@
-#ifndef HEALTHBAR_H
-#define HEALTHBAR_H
+#pragma once
+
 #include "Object.h"
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
@@ -19,8 +19,6 @@ private:
 	bool player_one;
 	
 };
-
-#endif
 
 /* 
 La "declaración anticipada" es cuando declaras una entidad antes de proporcionar su definición completa.

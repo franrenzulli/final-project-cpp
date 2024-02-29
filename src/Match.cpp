@@ -1,7 +1,6 @@
 #include "Match.h"
 #include "Menu.h"
 #include "Leaderboard.h"
-#include <iostream>
 #include <sstream>
 #include <SFML/Window/Keyboard.hpp>
 #include "Player.h"
@@ -63,11 +62,10 @@ Match::Match() : hb_p1(true), hb_p2(false) {
 	menuRect.setPosition(0,670);
 	
 	m_gameStartSoundBuff.loadFromFile("../assets/sounds/game_start.wav");
-	m_gameStartSound.setBuffer(m_gameStartSoundBuff);
-	
 	
 	chrono.Start(); // Empieza el cronometro
-	m_gameStartSound.play();
+	m_soundEffect.setBuffer(m_gameStartSoundBuff);
+	m_soundEffect.play();
 }
 
 
@@ -255,9 +253,7 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	window.display();
 }
 
-void Match::StartNextRound() { // Al comenzar nuevo round
-	std::cout<<"Starting a new rounds!"<<std::endl;
-	
+void Match::StartNextRound() { // Al comenzar nuevo round	
 	m_currentRound++; // Pasamos al siguiente round
 	chrono.Start(); // Empieza el cronometro
 	p1.SetLife(100.0f); // Actualizamos vida 
