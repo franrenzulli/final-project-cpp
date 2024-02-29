@@ -7,23 +7,35 @@
 using namespace sf;
 using namespace std;
 
-Player::Player(bool player_one) : Object(player_one ? "../assets/images/ken.png" : "../assets/images/ryu.png") {
-	this->player_one = player_one;
+Player::Player(bool player_one, Texture &tex) : Object(tex) {
+	this->player_one = player_one;	
+	
+	m_normalTex = *m_sprite.getTexture();
+	m_fireballTex.loadFromFile("../assets/images/fireball.png");
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
+
 		m_up = Keyboard::Key::W;
 		m_right = Keyboard::Key::D;
 		m_down = Keyboard::Key::S;
 		m_left = Keyboard::Key::A;
 		m_attackBasic = Keyboard::Key::J;
+		
 		m_sprite.setScale(-1,1);
+		
+		m_jumpTex.loadFromFile("../assets/images/kenjumping.png");
+		m_basicAtkTex.loadFromFile("../assets/images/kenpatada.png");
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
+		
 		m_up = Keyboard::Key::Up;
 		m_right = Keyboard::Key::Right;
 		m_down = Keyboard::Key::Down;
 		m_left = Keyboard::Key::Left;
 		m_attackBasic = Keyboard::Key::K;
+		
+		m_jumpTex.loadFromFile("../assets/images/kenjumping.png");
+		m_basicAtkTex.loadFromFile("../assets/images/kenpatada.png");
 	}
 	
 	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
@@ -74,13 +86,8 @@ void Player::Update(Player& opponent){
 			// Aplicar movimiento vertical para el salto
 			m_sprite.move(0, m_jumpSpeed);
 			
-			// La textura cambia segun que jugador es
-			
-			if (player_one) {
-				ChangeTexture("../assets/images/kenjumping.png");
-			} else {
-				ChangeTexture("../assets/images/ryujumping.png");
-			}
+			// La textura cambia
+			ChangeTexture(m_jumpTex);
 			
 			// Incrementar la velocidad vertical (simulando la gravedad)
 			m_jumpSpeed += 0.7f;
@@ -91,11 +98,7 @@ void Player::Update(Player& opponent){
 				m_isJumping = false;
 				
 				// La textura cambia segun que jugador es
-				if (player_one) {
-					ChangeTexture("../assets/images/ken.png");
-				} else {
-					ChangeTexture("../assets/images/ryu.png");
-				}
+				ChangeTexture(m_normalTex);
 			}
 		}
 
@@ -105,7 +108,7 @@ void Player::Update(Player& opponent){
 			m_kickSound.play();
 		}
 		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
-			ChangeTexture(player_one?"../assets/images/ken.png":"../assets/images/ryu.png");
+			ChangeTexture(m_normalTex);
 			m_texWasChangedOnBasicAttack =  false;
 		}	
 		
@@ -164,7 +167,7 @@ void Player::BasicAttack(Player& opponent) {
 	float damage = 10.0f;
 	int scores = 100;
 	m_clock.restart();
-	ChangeTexture(player_one?"../assets/images/kenpatada.png":"../assets/images/ryupatada.png");
+	ChangeTexture(m_basicAtkTex);
 	
 	m_texWasChangedOnBasicAttack = true;
 	
@@ -186,10 +189,10 @@ void Player::SpecialAttack(Player& opponent) {
 	// Hacemos que las bolas de fuego cambien de direccion segun adonde mira el personaje
 	Vector2f scale = m_sprite.getScale();
 	if(scale.x == -1){
-		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
+		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
 		fireballs.push_back(newFireball);
 	}else if(scale.x == 1){
-		Fireball newFireball(m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
+		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
 		fireballs.push_back(newFireball);
 	}
 	

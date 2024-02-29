@@ -7,6 +7,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 using namespace sf;
 using namespace std;
@@ -16,7 +17,7 @@ class Attack;
 
 class Player : public Object{
 public:
-	Player(bool player_one);
+	Player(bool player_one, Texture &tex);
 	void Update(Player& opponent);
 	void SetLife(float perc);
 	float GetLife();
@@ -44,6 +45,13 @@ public:
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2 
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas
+	
+	// texturas del jugador
+	Texture m_normalTex, m_jumpTex, m_basicAtkTex;
+	
+	// texturas miscelaneas
+	Texture m_fireballTex;
+	
 	bool m_isJumping;
 	bool m_wasAttackPressed;
 	bool m_wasSpecialAttackPressed;

@@ -7,7 +7,7 @@ class Player;
 
 class Fireball : public Object {
 public:
-	Fireball(float x, float y, float speed);
+	Fireball(Texture &tex, float x, float y, float speed);
 	
 	// Actualizar la posición y otros atributos de la bola de fuego
 	void Update(float deltaTime);

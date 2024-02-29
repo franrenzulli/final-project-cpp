@@ -3,12 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Scene.h"
-#include "Player.h"
 #include "HealthBar.h"
 #include "Chrono.h"
 #include <vector>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include "Player.h"
 
 class Match : public Scene { // Creamos escena Match
 public:
@@ -24,6 +24,8 @@ public:
 	void StartNextRound();
 	
 private:
+	Texture m_playerOneTex, m_playerTwoTex;
+	
 	bool gameEnded;
 	
 	RectangleShape blackoutRect;
@@ -38,7 +40,8 @@ private:
 	Texture m_tex_ground;
 	Sprite m_spr_background;
 	Sprite m_spr_ground;
-	Player p1, p2;
+	Player p1 = Player(true, m_playerOneTex);
+	Player p2 = Player(false, m_playerTwoTex);
 	HealthBar hb_p1, hb_p2;
 	SoundBuffer m_gameStartSoundBuff;
 	Sound m_gameStartSound;

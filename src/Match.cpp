@@ -4,13 +4,20 @@
 #include <iostream>
 #include <sstream>
 #include <SFML/Window/Keyboard.hpp>
+#include "Player.h"
 
 using namespace std;
 
-Match::Match() : p1(true), p2(false), hb_p1(true), hb_p2(false) {
+
+Match::Match() : hb_p1(true), hb_p2(false) {
 	// Cargamos fondo, textos, fuentes, suelo y posicionamos
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_playerOneTex.loadFromFile("../assets/images/ken.png");
+	m_playerTwoTex.loadFromFile("../assets/images/ryu.png");
 	
+	p1 = Player(true, m_playerOneTex);
+	p2 = Player(false, m_playerTwoTex);
+	
+	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(204, 0, 0));
 	m_t1.setString("Fight!");

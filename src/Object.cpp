@@ -1,15 +1,13 @@
 #include "Object.h"
 
 // Metodo para inicializar texturas a los objetos
-Object::Object(std::string fname) {
-	m_texture.loadFromFile(fname);
-	m_sprite.setTexture(m_texture);
+Object::Object(Texture &texture) {
+	m_sprite.setTexture(texture);
 }
 
 // Metodo para cambiar texturas a los objetos, y actualizar los sprites de los jugadores
-void Object::ChangeTexture(std::string fname){
-	m_texture.loadFromFile(fname);
-	m_sprite.setTexture(m_texture, true); // true parar
+void Object::ChangeTexture(Texture &texture){
+	m_sprite.setTexture(texture, true); // true parar
 	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, 0);
 }
 
