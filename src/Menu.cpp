@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include "Match.h"
 #include "Leaderboard.h"
+#include "PickPlayer.h"
 #include <iostream>
 
 
@@ -14,6 +15,7 @@ Menu::Menu() {
 	m_t1.setString("Start playing");
 	m_t1.setCharacterSize(30);
 	m_t1.setPosition(90, 300);
+
 	
 	m_t2.setFont(m_f1);
 	m_t2.setFillColor(Color(255,255,255));
@@ -46,7 +48,8 @@ void Menu::ProcessEvents(Game &game, Event &event) { // Teclas para salir del pr
 		sf::FloatRect button2Bounds = button2.getGlobalBounds();
 		
 		if (button1Bounds.contains(mousePos)) {
-			game.SetScene(new Match()); // Seteamos la escena de la pelea
+			//game.SetScene(new Match()); // Seteamos la escena de la pelea
+			game.SetScene(new PickPlayer());
 		}else if(button2Bounds.contains(mousePos)){
 			game.SetScene(new Leaderboard("../leaderboard.dat", 6000, false));
 		}

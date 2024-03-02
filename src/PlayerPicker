@@ -1,0 +1,11 @@
+#ifndef PLAYERPICKE_H
+#define PLAYERPICKE_H
+
+class PlayerPicke {
+public:
+	PlayerPicke();
+private:
+};
+
+#endif
+
