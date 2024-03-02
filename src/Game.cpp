@@ -45,3 +45,7 @@ void Game::SetScene(Scene *next_scene) {
 void Game::Exit() {
     m_window.close();
 }
+
+const RenderWindow &Game::GetWindow() {
+	return m_window;
+}
