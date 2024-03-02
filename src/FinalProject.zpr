@@ -24,8 +24,7 @@ path=Game.cpp
 cursor=49:17
 [source]
 path=Menu.cpp
-cursor=65:0
-open=true
+cursor=10:0
 [source]
 path=Scene.cpp
 cursor=1:0
@@ -52,7 +51,7 @@ path=Leaderboard.cpp
 cursor=144:3
 [source]
 path=PickPlayer.cpp
-cursor=28:24
+cursor=31:28
 open=true
 [header]
 path=Game.h
@@ -86,7 +85,8 @@ path=Leaderboard.h
 cursor=1:0
 [header]
 path=PickPlayer.h
-cursor=29:1
+cursor=0:0
+open=true
 [config]
 name=Debug_Win32
 toolchain=
