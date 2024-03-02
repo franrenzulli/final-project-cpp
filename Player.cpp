@@ -1,0 +1,233 @@
+#include "Player.h"
+#include <SFML/Window/Keyboard.hpp>
+#include <sstream>
+#include <SFML/Audio/Sound.hpp>
+
+using namespace sf;
+using namespace std;
+
+Player::Player(bool player_one, Texture &tex) : Object(tex) {
+	this->player_one = player_one;	
+	
+	m_normalTex = *m_sprite.getTexture();
+	m_fireballTex.loadFromFile("../assets/images/fireball.png");
+	if(player_one){
+		m_sprite.setPosition(400,300); // Posicion inicial de player 1
+
+		m_up = Keyboard::Key::W;
+		m_right = Keyboard::Key::D;
+		m_down = Keyboard::Key::S;
+		m_left = Keyboard::Key::A;
+		m_attackBasic = Keyboard::Key::J;
+		
+		m_sprite.setScale(-1,1);
+		
+		m_jumpTex.loadFromFile("../assets/images/kenjumping.png");
+		m_basicAtkTex.loadFromFile("../assets/images/kenpatada.png");
+	}else{
+		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
+		
+		m_up = Keyboard::Key::Up;
+		m_right = Keyboard::Key::Right;
+		m_down = Keyboard::Key::Down;
+		m_left = Keyboard::Key::Left;
+		m_attackBasic = Keyboard::Key::K;
+		
+		m_jumpTex.loadFromFile("../assets/images/ryujumping.png");
+		m_basicAtkTex.loadFromFile("../assets/images/ryupatada.png");
+	}
+	
+	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
+	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, 0);
+	
+	// variables para el salto
+	m_isJumping = false;
+	m_jumpSpeed = 0.0f;
+	
+	m_wasAttackPressed = false;
+	
+	m_kickSoundBuff.loadFromFile("../assets/sounds/kick.wav");
+	m_jumpSoundBuff.loadFromFile("../assets/sounds/jump.wav");
+	m_fireballSoundBuff.loadFromFile("../assets/sounds/fireball.wav");
+}
+
+void Player::Update(Player& opponent){
+	if (GetLife() > 0 && opponent.GetLife() > 0){ // chequea que el jugador este vivo
+		// Input de teclas para movimientos
+		ValidateScreenLimits();
+		if (Keyboard::isKeyPressed(m_left)){
+			m_sprite.setScale(1,1);
+			m_sprite.move(-5,0);		
+		}
+		
+		if (Keyboard::isKeyPressed(m_right)){
+			m_sprite.move(+5,0);
+			m_sprite.setScale(-1,1);
+		}
+		
+		if (Keyboard::isKeyPressed(m_down)) {
+			//...
+		}
+		
+		// salto
+		if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
+			m_soundEffect.setBuffer(m_jumpSoundBuff);
+			
+			m_isJumping = true;
+			m_jumpSpeed = -20.0f;
+			
+			m_soundEffect.play();
+		}
+		
+		// movimiento vertical
+		if(m_isJumping){
+			// Aplicar movimiento vertical para el salto
+			m_sprite.move(0, m_jumpSpeed);
+			
+			// La textura cambia
+			ChangeTexture(m_jumpTex);
+			
+			// Incrementar la velocidad vertical (simulando la gravedad)
+			m_jumpSpeed += 0.7f;
+			
+			// Comprobar si el jugador aterrizo
+			if(m_sprite.getPosition().y >= 300){
+				m_sprite.setPosition(m_sprite.getPosition().x, 300);
+				m_isJumping = false;
+				
+				// La textura cambia segun que jugador es
+				ChangeTexture(m_normalTex);
+			}
+		}
+
+		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
+		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
+			m_soundEffect.setBuffer(m_kickSoundBuff);
+			BasicAttack(opponent);
+			m_soundEffect.play();
+		}
+		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
+			ChangeTexture(m_normalTex);
+			m_texWasChangedOnBasicAttack =  false;
+		}	
+		
+		
+		// realiza el ataque solo cuando la tecla pasa de no estar presionada a estar presionada. 
+		m_wasAttackPressed = isAttackPressed;
+		
+		// --- SPECIAL ATTACK ---
+		
+		// movimiento -> sf::seconds()
+		m_deltaTime = seconds(0.0166667f);
+
+		// Actualizar las bolas de fuego
+		for (auto& fireball : fireballs) {
+			fireball.Update(m_deltaTime.asSeconds());
+			
+			float fireballDamage = 30.0f;
+			// Verificar colisión con el oponente
+			if (fireball.CheckCollision(opponent)) {
+				// Restar vida al oponente
+				opponent.SetLife(opponent.GetLife() - fireballDamage);
+				m_score += 500;
+				// Eliminar la bola de fuego
+				fireball = fireballs.back();  // Copiamos la última bola de fuego al lugar de la actual
+				fireballs.pop_back();         // Eliminamos la última bola de fuego (que ahora está duplicada)
+			}
+		}
+		
+		// Eliminar las bolas de fuego que salieron de la pantalla
+		fireballs.erase(remove_if(fireballs.begin(), fireballs.end(),
+								  [](const Fireball& fireball) {
+									  return fireball.GetBounds().left > 1280;  // Cambia el valor según el ancho de la ventana
+								  }), fireballs.end());
+		
+		
+		// Ataque especial
+		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
+		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
+			m_soundEffect.setBuffer(m_fireballSoundBuff);
+			SpecialAttack(opponent);
+			m_soundEffect.play();
+		}
+		
+		m_wasSpecialAttackPressed = isSpecialAttackPressed;
+	}
+}
+
+bool Player::CheckCollision(const Player& other) const {
+	return Object::CheckCollision(other);
+}
+
+
+void Player::BasicAttack(Player& opponent) {
+	float damage = 10.0f;
+	int scores = 100;
+	m_clock.restart();
+	ChangeTexture(m_basicAtkTex);
+	
+	m_texWasChangedOnBasicAttack = true;
+	
+	if(CheckCollision(opponent)){
+		// le restamos vida al oponente
+		opponent.SetLife(opponent.GetLife() - damage);
+		m_score += scores;
+	}
+}
+
+void Player::SpecialAttack(Player& opponent) {
+	// se chequea que el jugador esta vivo en Player::Update()
+	float speed;
+	speed = 500.0f; // velocidad y direccion del disparo
+	
+	// Hacemos que las bolas de fuego cambien de direccion segun adonde mira el personaje
+	Vector2f scale = m_sprite.getScale();
+	if(scale.x == -1){
+		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
+		fireballs.push_back(newFireball);
+	}else if(scale.x == 1){
+		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
+		fireballs.push_back(newFireball);
+	}
+	
+}
+
+void Player::SetDeltaTime(sf::Time deltaTime) {
+	m_deltaTime = deltaTime;
+}
+
+void Player::SetLife(float perc) {
+	life_percent = perc;
+}
+
+float Player::GetLife() {
+	return life_percent;
+}
+
+void Player::ValidateScreenLimits() {
+	auto pos = m_sprite.getPosition();
+	if (pos.x > 1280)
+		m_sprite.setPosition(1280, pos.y);
+	
+	if (pos.x < 0)
+		m_sprite.setPosition(0, pos.y);
+}
+vector<Fireball>& Player::GetFireballs() {
+	return fireballs;
+}
+
+std::string Player::GetScoreStr() {
+	std::stringstream scoreStr;
+	scoreStr<<m_score;
+	return scoreStr.str();
+}
+
+void Player::restart(bool player_one){
+	if(player_one){
+		m_sprite.setScale(-1,1);
+		m_sprite.setPosition(400,300);
+	}else{
+		m_sprite.setScale(1,1);
+		m_sprite.setPosition(1000,300);
+	}
+}
