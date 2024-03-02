@@ -1,5 +1,7 @@
 #include "Menu.h"
 #include "Match.h"
+#include <iostream>
+
 
 
 Menu::Menu() {
@@ -28,6 +30,10 @@ void Menu::ProcessEvents(Game &game, Event &event) { // Teclas para salir del pr
 		
 		game.SetScene(new Match()); // Seteamos la escena de la pelea
 		
+	}else if(event.type == sf::Event::MouseButtonPressed){
+		cout << "Hola" << endl;
+//		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window)); // ACA ESTA EL PROBLEMA <------------------------------------------------------------------------------------------
+//		cout << mousePos.x << mousePos.y << endl; // Muestra donde clickeamos en el mouse
 	}
 }
 
