@@ -25,9 +25,9 @@ Match::Match() : hb_p1(true), hb_p2(false) {
 	
 	m_t2.setFont(m_f1);
 	m_t2.setFillColor(Color(255, 255, 255));
-	m_t2.setString("Press ESCAPE to go back to the menu");
+	m_t2.setString("Go back to the menu");
 	m_t2.setCharacterSize(13);
-	m_t2.setPosition(10,690);
+	m_t2.setPosition(40,690);
 	
 	m_tex_background.loadFromFile("../assets/images/fondomatch.png");
 	m_tex_ground.loadFromFile("../assets/images/cobblestoneground.png");
@@ -57,7 +57,7 @@ Match::Match() : hb_p1(true), hb_p2(false) {
 	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
 	leaderboardRect.setSize(Vector2f(430, 60)); 
 	leaderboardRect.setFillColor(Color(0, 0, 0, 0)); 
-	menuRect.setSize(Vector2f(480,50));
+	menuRect.setSize(Vector2f(330,50));
 	menuRect.setFillColor(Color(212,43,43)); 
 	menuRect.setPosition(0,670);
 	
@@ -75,8 +75,18 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
 		game.SetScene(new Menu());
 	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
-		game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints)); // Seteamos la escena del leaderboard
+		game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints, true)); // Seteamos la escena del leaderboard
 		
+	}else if(event.type == sf::Event::MouseButtonPressed){
+		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(game.GetWindow())); 
+		sf::FloatRect menuRectBounds = menuRect.getGlobalBounds();
+		sf::FloatRect leaderboardRectBounds = leaderboardRect.getGlobalBounds();
+		
+		if (menuRectBounds.contains(mousePos)) {
+			game.SetScene(new Menu()); 
+		}else if(leaderboardRectBounds.contains(mousePos)){
+			game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints, true));
+		}
 	}
 }
 void Match::Update(Game &game) {

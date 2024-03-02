@@ -14,7 +14,7 @@ struct PlayerData {
 
 class Leaderboard : public Scene { // Creamos la escena Leaderboard
 public:
-	Leaderboard(string fname, int winnerPoints);
+	Leaderboard(string fname, int winnerPoints, bool allowSaving);
 	~Leaderboard();
 	
 	void ProcessEvents(Game &game, Event &event) override;
@@ -29,7 +29,9 @@ private:
 	Text m_t3;
 	Text m_t4;
 	Text m_t5; // Texto donde se escribiran los puntos
+	Text m_t6;
 	Text m_name, m_points, m_totalWins;
+	RectangleShape button1;
 	string currentInput;
 	Texture m_tex_background;
 	Sprite m_spr_background;	
@@ -37,6 +39,7 @@ private:
 	vector<PlayerData> m_leaders;
 	string m_filename;
 	bool m_scoreSaved;
+	bool allowSaving;
 };
 
 

@@ -13,10 +13,14 @@
 using namespace sf;
 using namespace std;
 
-Leaderboard::Leaderboard(string fname, int winnerPoints) : m_filename(fname), m_winnerPoints(winnerPoints) {
+Leaderboard::Leaderboard(string fname, int winnerPoints, bool allowSaving) : m_filename(fname), m_winnerPoints(winnerPoints), allowSaving(allowSaving) {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
 	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	
+	button1.setSize(Vector2f(340,50));
+	button1.setFillColor(Color(212,43,43)); 
+	button1.setPosition(50,535);
 	
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(255,255,255));
@@ -29,40 +33,48 @@ Leaderboard::Leaderboard(string fname, int winnerPoints) : m_filename(fname), m_
 	m_t2.setCharacterSize(40);
 	m_t2.setPosition(50, 350);	
 	
-	m_t3.setFont(m_f1);
-	m_t3.setFillColor(Color(255,255,255));
-	m_t3.setString("Escriba el nombre del ganador");
-	m_t3.setCharacterSize(15);
-	m_t3.setPosition(50, 300);
+	if(allowSaving){
+		m_t3.setFont(m_f1);
+		m_t3.setFillColor(Color(255,255,255));
+		m_t3.setString("Write winner's name");
+		m_t3.setCharacterSize(15);
+		m_t3.setPosition(50, 300);
+		
+		m_t4.setFont(m_f1);
+		m_t4.setFillColor(Color(255,255,255,0));
+		m_t4.setString("Press ENTER to Save");
+		m_t4.setCharacterSize(15);
+		m_t4.setPosition(50, 425);
+		
+		m_t5.setFont(m_f1);
+		m_t5.setFillColor(Color(255,255,255));
+		m_t5.setString(to_string(winnerPoints) + " points");
+		m_t5.setCharacterSize(15);
+		m_t5.setPosition(50, 475);
+	}
 	
-	m_t4.setFont(m_f1);
-	m_t4.setFillColor(Color(255,255,255,0));
-	m_t4.setString("Presiona ENTER para guardar");
-	m_t4.setCharacterSize(15);
-	m_t4.setPosition(50, 425);
-	
-	m_t5.setFont(m_f1);
-	m_t5.setFillColor(Color(255,255,255));
-	m_t5.setString(to_string(winnerPoints) + " points");
-	m_t5.setCharacterSize(15);
-	m_t5.setPosition(50, 475);
+	m_t6.setFont(m_f1);
+	m_t6.setFillColor(Color(255,255,255));
+	m_t6.setString("Go back to menu");
+	m_t6.setCharacterSize(20);
+	m_t6.setPosition(70, 550);
 	
 	m_name.setFont(m_f1);
 	m_name.setFillColor(Color(255,255,255));
 	m_name.setCharacterSize(20);
-	m_name.setPosition(600, 150);
+	m_name.setPosition(650, 200);
 	m_name.setString("name");
 	
 	m_points.setFont(m_f1);
 	m_points.setFillColor(Color(255,255,255));
 	m_points.setCharacterSize(20);
-	m_points.setPosition(750, 150);
+	m_points.setPosition(850, 200);
 	m_points.setString("points");
 	
 	m_totalWins.setFont(m_f1);
 	m_totalWins.setFillColor(Color(255,255,255));
 	m_totalWins.setCharacterSize(20);
-	m_totalWins.setPosition(900, 150);
+	m_totalWins.setPosition(1000, 200);
 	m_totalWins.setString("total wins");
 	
 	
@@ -80,11 +92,8 @@ Leaderboard::~Leaderboard() {
 	SaveDataToFile(m_filename);
 }
 
-void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
-	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-		SaveDataToFile(m_filename);
-		game.SetScene(new Menu());
-	}else if (event.type == Event::TextEntered) { // Escribir tu nombre en la pantalla
+void Leaderboard::ProcessEvents(Game &game, Event &event) { 
+	if ((event.type == Event::TextEntered) && allowSaving) { // Escribir tu nombre en la pantalla
 		if (event.text.unicode < 128) {
 			if (event.text.unicode == 8 && !currentInput.empty()) {
 				// Retroceso: eliminar el último carácter
@@ -127,14 +136,22 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) { // Volver al menu
 		}else{
 			m_t4.setFillColor(Color(255,255,255,0));
 		}
+	}else if(event.type == sf::Event::MouseButtonPressed){ // Volver al menu
+		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(game.GetWindow())); 
+		sf::FloatRect button1Bounds = button1.getGlobalBounds();
+		
+		if (button1Bounds.contains(mousePos)) {
+			SaveDataToFile(m_filename);
+			game.SetScene(new Menu());
+		}
 	}
 }
 
 void Leaderboard::Update(Game &game) {
 	stringstream names, points, wins;
-	names<<"name"<<endl;
-	points<<"points"<<endl;
-	wins<<"wins"<<endl;
+	names<<"NAMES"<<endl;
+	points<<"POINTS"<<endl;
+	wins<<"WINS"<<endl;
 	
 	for (auto& p : m_leaders) {
 		names<<string(p.name)<<endl;
@@ -148,20 +165,18 @@ void Leaderboard::Update(Game &game) {
 void Leaderboard::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.clear({0,0,0});
 	window.draw(m_spr_background);
+	window.draw(button1);
 	window.draw(m_t1);
 	window.draw(m_t2);
 	window.draw(m_t3);
 	window.draw(m_t4);
 	window.draw(m_t5);
+	window.draw(m_t6);
 	window.draw(m_name);
 	window.draw(m_points);
 	window.draw(m_totalWins);
 	window.display();
 }
-
-
-
-
 
 void Leaderboard::SaveDataToFile(const string& filename) {
 	ofstream file(filename, ios::binary);
