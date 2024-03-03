@@ -3,6 +3,8 @@
 #include "PickPlayer.h"
 #include "Match.h"
 #include "Menu.h"
+#include <iostream>  // Include the iostream library
+
 
 using namespace sf;
 
@@ -59,13 +61,14 @@ PickPlayer::PickPlayer() {
 	michael_sprite.setPosition(850, 450);
 	michael_sprite.setScale(0.9, 0.9);
 	
+	
 }
 
 
-void PickPlayer::ProcessEvents(Game &game, sf::Event &event) {
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+void PickPlayer::ProcessEvents(Game &game, Event &event) {
+	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
 		game.Exit();
-	} else if (event.type == sf::Event::MouseButtonPressed) {
+	} else if (event.type == Event::MouseButtonPressed) {
 		Vector2f mousePos = Vector2f(Mouse::getPosition(game.GetWindow()));
 		
 		// botones de inicio
@@ -79,13 +82,37 @@ void PickPlayer::ProcessEvents(Game &game, sf::Event &event) {
 		FloatRect michaelBounds = michael_sprite.getGlobalBounds();
 		
 		
-		if (ryuBounds.contains(mousePos)) {
+		// Reset opacity 
+		ryu_sprite.setColor(sf::Color(255, 255, 255, 255));
+		ken_sprite.setColor(sf::Color(255, 255, 255, 255));
+		retsu_sprite.setColor(sf::Color(255, 255, 255, 255));
+		michael_sprite.setColor(sf::Color(255, 255, 255, 255));		
+		
+		if (ryuBounds.contains(mousePos) && Event::MouseButtonPressed) {
+			
+			if(event.mouseButton.button == Mouse::Left){
+				player_one = "Ryu";
+			}else if(event.mouseButton.button == Mouse::Right) player_two = "Ryu";
+			
+			
 			ryu_sprite.setColor(sf::Color(255, 255, 255, 128));
+			
 		} else if (kenBounds.contains(mousePos)) {
+			if(event.mouseButton.button == Mouse::Left){
+				player_one = "Ken";
+			}else if(event.mouseButton.button == Mouse::Right) player_two = "Ken";
+			
 			ken_sprite.setColor(sf::Color(255, 255, 255, 128));
 		}else if (retsuBounds.contains(mousePos)) {
+			if(event.mouseButton.button == Mouse::Left){
+				player_one = "Geky";
+			}else if(event.mouseButton.button == Mouse::Right) player_two = "Geky";
+			
 			retsu_sprite.setColor(sf::Color(255, 255, 255, 128));
 		}else if (michaelBounds.contains(mousePos)) {
+			if(event.mouseButton.button == Mouse::Left){
+				player_one = "Michael";
+			}else if(event.mouseButton.button == Mouse::Right) player_two = "Michael";
 			michael_sprite.setColor(sf::Color(255, 255, 255, 128));
 		}
 		
@@ -93,7 +120,13 @@ void PickPlayer::ProcessEvents(Game &game, sf::Event &event) {
 		
 		if (button1Bounds.contains(mousePos)) {
 			ryu_sprite.setColor(sf::Color(255, 255, 255, 128));
-			//game.SetScene(new Match());
+			// Imprimir el estado de player_one y player_two
+			std::cout << "Player One: " << player_one << std::endl;
+			std::cout << "Player Two: " << player_two << std::endl;
+			
+			//if(!!player_one && !!player_two){
+				//game.SetScene(new Match());
+			//}
 		} else if (button2Bounds.contains(mousePos)) {
 			game.SetScene(new Menu());
 		}
@@ -102,6 +135,7 @@ void PickPlayer::ProcessEvents(Game &game, sf::Event &event) {
 
 void PickPlayer::Update(Game &game) {
 	// Update implementation (if needed)
+
 }
 
 void PickPlayer::Draw(sf::RenderWindow &window) {

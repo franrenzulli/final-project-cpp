@@ -9,6 +9,7 @@
 #include "Menu.h"
 
 using namespace sf;
+using namespace std;
 
 class PickPlayer : public Scene {
 public:
@@ -18,6 +19,9 @@ public:
 	void Update(Game &game) override;
 	void Draw(sf::RenderWindow &window) override;
 private:
+	
+	string player_one, player_two;
+	
 	Texture m_tex_background;
 	Texture m_ryu;
 	Texture m_ken;

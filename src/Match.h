@@ -12,7 +12,7 @@
 
 class Match : public Scene { // Creamos escena Match
 public:
-	Match();
+	Match(string player_one, string player_two);
 	~Match();
 	
 	void ProcessEvents(Game &game, Event &event) override;

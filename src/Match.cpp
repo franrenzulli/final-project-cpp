@@ -8,7 +8,7 @@
 using namespace std;
 
 
-Match::Match() : hb_p1(true), hb_p2(false) {
+Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	// Cargamos fondo, textos, fuentes, suelo y posicionamos
 	m_playerOneTex.loadFromFile("../assets/images/ken.png");
 	m_playerTwoTex.loadFromFile("../assets/images/ryu.png");
