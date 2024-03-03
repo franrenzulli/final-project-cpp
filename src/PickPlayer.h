@@ -43,6 +43,8 @@ private:
 	Text m_t2;
 	Font m_f1;
 	
+	sf::Sprite *selectedP1 = nullptr; 
+	sf::Sprite *selectedP2 = nullptr;
 };
 
 #endif

@@ -5,16 +5,43 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "Player.h"
 
+#include <iostream>
 using namespace std;
 
 
 Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
-	// Cargamos fondo, textos, fuentes, suelo y posicionamos
-	m_playerOneTex.loadFromFile("../assets/images/ken.png");
-	m_playerTwoTex.loadFromFile("../assets/images/ryu.png");
+	// Carga la textura inicial adecuada para PlayerOne
+	if (player_one == "Ryu") {
+		m_playerOneTex.loadFromFile("../assets/images/ryu/ryu.png");
+	}
+	if (player_one == "Ken") {
+		m_playerOneTex.loadFromFile("../assets/images/ken/ken.png");
+	}
+	if (player_one == "Retsu") {
+		m_playerOneTex.loadFromFile("../assets/images/retsu/retsu.png");
+	}
+	if (player_one == "Michael") {
+		m_playerOneTex.loadFromFile("../assets/images/mike/mike.png");
+	}
 	
-	p1 = Player(true, m_playerOneTex);
-	p2 = Player(false, m_playerTwoTex);
+	// Carga la textura inicial adecuada para PlayerTwo
+	if (player_two == "Ryu") {
+		m_playerTwoTex.loadFromFile("../assets/images/ryu/ryu.png");
+	}
+	if (player_two == "Ken") {
+		m_playerTwoTex.loadFromFile("../assets/images/ken/ken.png");
+	}
+	if (player_two == "Retsu") {
+		m_playerTwoTex.loadFromFile("../assets/images/retsu/retsu.png");
+	}
+	if (player_two == "Michael") {
+		m_playerTwoTex.loadFromFile("../assets/images/mike/mike.png");
+	}
+	
+	
+	// Cargamos fondo, textos, fuentes, suelo y posicionamos
+	p1 = Player(true, player_one, m_playerOneTex);
+	p2 = Player(false, player_two, m_playerTwoTex);
 	
 	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
 	m_t1.setFont(m_f1);
@@ -203,11 +230,13 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	
 	// Dibujar las bolas de fuego del jugador 1
 	for (const auto& fireball : p1.GetFireballs()) {
+		std::cout<<"Fireball jugador 1 dibujada."<<std::endl;
 		fireball.Draw(window);
 	}
 	
 	// Dibujar las bolas de fuego del jugador 2
 	for (const auto& fireball : p2.GetFireballs()) {
+		std::cout<<"Fireball jugador 2 dibujada."<<std::endl;
 		fireball.Draw(window);
 	}
 	

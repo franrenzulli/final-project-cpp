@@ -8,7 +8,7 @@ using namespace sf;
 
 class Object { // Clase que se encarga de cargar las imagenes de cada sprite y pintarlas en pantalla
 public:
-	Object(Texture &texture);
+	Object(Texture &tex);
 	void Draw(RenderWindow &window) const;
 	bool CheckCollision(const Object& other) const;
 	void ChangeTexture(Texture &texture); // Cambia textura de los sprites

@@ -1,8 +1,8 @@
 #include "Object.h"
 
-// Metodo para inicializar texturas a los objetos
-Object::Object(Texture &texture) {
-	m_sprite.setTexture(texture);
+// Constructor
+Object::Object(Texture &tex) {
+	m_sprite.setTexture(tex);
 }
 
 // Metodo para cambiar texturas a los objetos, y actualizar los sprites de los jugadores

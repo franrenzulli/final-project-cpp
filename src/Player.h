@@ -17,7 +17,7 @@ class Attack;
 
 class Player : public Object{
 public:
-	Player(bool player_one, Texture &tex);
+	Player(bool player_one, string name, Texture &tex);
 	void Update(Player& opponent);
 	void SetLife(float perc);
 	float GetLife();

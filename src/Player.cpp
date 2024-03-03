@@ -2,39 +2,60 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <sstream>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
+#include <iostream>
 using namespace sf;
 using namespace std;
 
-Player::Player(bool player_one, Texture &tex) : Object(tex) {
+
+Player::Player(bool player_one, string name, Texture &tex) : Object(tex) {
 	this->player_one = player_one;	
 	
-	m_normalTex = *m_sprite.getTexture();
+	// carga las texturas
+	if (name == "Ryu") {
+		// cargar texturas de ryu
+		m_normalTex.loadFromFile("../assets/images/ryu/ryu.png");
+		m_jumpTex.loadFromFile("../assets/images/ryu/ryu_saltando.png");
+		m_basicAtkTex.loadFromFile("../assets/images/ryu/ryu_patada.png");
+	} 
+	if (name == "Ken") {
+		// cargar texturas de ken
+		m_normalTex.loadFromFile("../assets/images/ken/ken.png");
+		m_jumpTex.loadFromFile("../assets/images/ken/ken_saltando.png");
+		m_basicAtkTex.loadFromFile("../assets/images/ken/ken_patada.png");
+	}
+	if (name == "Retsu") {
+		// cargar texturas de retsu
+		m_normalTex.loadFromFile("../assets/images/retsu/retsu.png");
+		m_jumpTex.loadFromFile("../assets/images/retsu/retsu_saltando.png");
+		m_basicAtkTex.loadFromFile("../assets/images/retsu/retsu_pina.png");
+	}
+	if (name == "Michael") {
+		// cargar texturas de michael
+		m_normalTex.loadFromFile("../assets/images/mike/mike.png");
+		m_jumpTex.loadFromFile("../assets/images/mike/mike_saltando.png");
+		m_basicAtkTex.loadFromFile("../assets/images/mike/mike_pina.png");
+	}
+	
 	m_fireballTex.loadFromFile("../assets/images/fireball.png");
+	
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
-
 		m_up = Keyboard::Key::W;
 		m_right = Keyboard::Key::D;
 		m_down = Keyboard::Key::S;
 		m_left = Keyboard::Key::A;
 		m_attackBasic = Keyboard::Key::J;
-		
-		m_sprite.setScale(-1,1);
-		
-		m_jumpTex.loadFromFile("../assets/images/kenjumping.png");
-		m_basicAtkTex.loadFromFile("../assets/images/kenpatada.png");
+		m_sprite.setScale(-4, 4);
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
-		
 		m_up = Keyboard::Key::Up;
 		m_right = Keyboard::Key::Right;
 		m_down = Keyboard::Key::Down;
 		m_left = Keyboard::Key::Left;
 		m_attackBasic = Keyboard::Key::K;
-		
-		m_jumpTex.loadFromFile("../assets/images/ryujumping.png");
-		m_basicAtkTex.loadFromFile("../assets/images/ryupatada.png");
+		m_sprite.setScale(4,4);
 	}
 	
 	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
@@ -56,13 +77,13 @@ void Player::Update(Player& opponent){
 		// Input de teclas para movimientos
 		ValidateScreenLimits();
 		if (Keyboard::isKeyPressed(m_left)){
-			m_sprite.setScale(1,1);
+			m_sprite.setScale(4,4);
 			m_sprite.move(-5,0);		
 		}
 		
 		if (Keyboard::isKeyPressed(m_right)){
 			m_sprite.move(+5,0);
-			m_sprite.setScale(-1,1);
+			m_sprite.setScale(-4,4);
 		}
 		
 		if (Keyboard::isKeyPressed(m_down)) {
@@ -182,12 +203,14 @@ void Player::SpecialAttack(Player& opponent) {
 	
 	// Hacemos que las bolas de fuego cambien de direccion segun adonde mira el personaje
 	Vector2f scale = m_sprite.getScale();
-	if(scale.x == -1){
+	if(scale.x < 0){
 		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
 		fireballs.push_back(newFireball);
-	}else if(scale.x == 1){
+		std::cout<<"New fireball created"<<std::endl;
+	}else if(scale.x > 0){
 		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
 		fireballs.push_back(newFireball);
+		std::cout<<"New fireball created"<<std::endl;
 	}
 	
 }
@@ -224,10 +247,10 @@ std::string Player::GetScoreStr() {
 
 void Player::restart(bool player_one){
 	if(player_one){
-		m_sprite.setScale(-1,1);
+		m_sprite.setScale(-4, 4);
 		m_sprite.setPosition(400,300);
 	}else{
-		m_sprite.setScale(1,1);
+		m_sprite.setScale(4, 4);
 		m_sprite.setPosition(1000,300);
 	}
 }

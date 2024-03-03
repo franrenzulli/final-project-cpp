@@ -40,8 +40,8 @@ private:
 	Texture m_tex_ground;
 	Sprite m_spr_background;
 	Sprite m_spr_ground;
-	Player p1 = Player(true, m_playerOneTex);
-	Player p2 = Player(false, m_playerTwoTex);
+	Player p1 = Player(true, "Ken", m_playerOneTex);
+	Player p2 = Player(false, "Ryu", m_playerTwoTex);
 	HealthBar hb_p1, hb_p2;
 	
 	SoundBuffer m_gameStartSoundBuff;
