@@ -18,24 +18,28 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex) {
 		m_normalTex.loadFromFile("../assets/images/ryu/ryu.png");
 		m_jumpTex.loadFromFile("../assets/images/ryu/ryu_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/ryu/ryu_patada.png");
+		m_crouchTex.loadFromFile("../assets/images/ryu/ryu_agachado.png");
 	} 
 	if (name == "Ken") {
 		// cargar texturas de ken
 		m_normalTex.loadFromFile("../assets/images/ken/ken.png");
 		m_jumpTex.loadFromFile("../assets/images/ken/ken_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/ken/ken_patada.png");
+		m_crouchTex.loadFromFile("../assets/images/ken/ken_agachado.png");
 	}
 	if (name == "Retsu") {
 		// cargar texturas de retsu
 		m_normalTex.loadFromFile("../assets/images/retsu/retsu.png");
 		m_jumpTex.loadFromFile("../assets/images/retsu/retsu_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/retsu/retsu_pina.png");
+		m_crouchTex.loadFromFile("../assets/images/retsu/retsu_agachado.png");
 	}
 	if (name == "Michael") {
 		// cargar texturas de michael
 		m_normalTex.loadFromFile("../assets/images/mike/mike.png");
 		m_jumpTex.loadFromFile("../assets/images/mike/mike_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/mike/mike_pina.png");
+		m_crouchTex.loadFromFile("../assets/images/mike/mike_agachado.png");
 	}
 	
 	m_fireballTex.loadFromFile("../assets/images/fireball.png");
@@ -64,6 +68,8 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex) {
 	// variables para el salto
 	m_isJumping = false;
 	m_jumpSpeed = 0.0f;
+	m_isCrouching = false;
+	m_isStanding = false;
 	
 	m_wasAttackPressed = false;
 	
@@ -87,8 +93,10 @@ void Player::Update(Player& opponent){
 		}
 		
 		if (Keyboard::isKeyPressed(m_down)) {
-			//...
-		}
+			Crouch();
+		} else if (!m_isJumping && !m_isStanding) {
+			StandUp();
+		}		
 		
 		// salto
 		if (Keyboard::isKeyPressed(m_up) && !m_isJumping) {
@@ -252,5 +260,26 @@ void Player::restart(bool player_one){
 	}else{
 		m_sprite.setScale(4, 4);
 		m_sprite.setPosition(1000,300);
+	}
+	
+}
+
+void Player::Crouch() {
+	if (!m_isCrouching) {
+		m_isCrouching = true;
+		m_isStanding = false;
+		ChangeTexture(m_crouchTex);
+		// Move the sprite 100 pixels downward when crouching
+		m_sprite.setPosition(m_sprite.getPosition().x, m_sprite.getPosition().y + 100);
+		
+	}
+}
+void Player::StandUp() {
+	if (!m_isStanding) {
+		m_isStanding = true;
+		m_isCrouching = false;
+		ChangeTexture(m_normalTex);
+		// Move the sprite 300 pixels downward when standing
+		m_sprite.setPosition(m_sprite.getPosition().x, 300);
 	}
 }

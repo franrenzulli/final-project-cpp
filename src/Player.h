@@ -32,6 +32,8 @@ public:
 	bool CheckCollision(const Player& other) const;
 	void SetDeltaTime(sf::Time deltaTime);
 	void ValidateScreenLimits();
+	void Crouch();
+	void StandUp();
 	void WonARound() {
 		m_roundsWon++;
 	}
@@ -47,7 +49,7 @@ private:
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas
 	
 	// texturas del jugador
-	Texture m_normalTex, m_jumpTex, m_basicAtkTex;
+	Texture m_normalTex, m_jumpTex, m_basicAtkTex, m_crouchTex;
 	
 	// texturas miscelaneas
 	Texture m_fireballTex;
@@ -56,6 +58,8 @@ private:
 	Sound m_soundEffect;
 	
 	bool m_isJumping;
+	bool m_isCrouching;
+	bool m_isStanding;
 	bool m_wasAttackPressed;
 	bool m_wasSpecialAttackPressed;
 	float m_jumpSpeed;
