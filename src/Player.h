@@ -45,7 +45,8 @@ public:
 		return m_score;
 	}
 private:
-	bool player_one; // Indica si es el jugador 1 o el 2 
+	bool player_one; // Indica si es el jugador 1 o el 2
+	string m_name;
 	Keyboard::Key m_up, m_right, m_down, m_left, m_attackBasic;// Teclas
 	
 	// texturas del jugador

@@ -9,32 +9,32 @@ using namespace sf;
 using namespace std;
 
 
-Player::Player(bool player_one, string name, Texture &tex) : Object(tex) {
+Player::Player(bool player_one, string name, Texture &tex) : Object(tex), m_name(name) {
 	this->player_one = player_one;	
 	
 	// carga las texturas
-	if (name == "Ryu") {
+	if (m_name == "Ryu") {
 		// cargar texturas de ryu
 		m_normalTex.loadFromFile("../assets/images/ryu/ryu.png");
 		m_jumpTex.loadFromFile("../assets/images/ryu/ryu_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/ryu/ryu_patada.png");
 		m_crouchTex.loadFromFile("../assets/images/ryu/ryu_agachado.png");
 	} 
-	if (name == "Ken") {
+	if (m_name == "Ken") {
 		// cargar texturas de ken
 		m_normalTex.loadFromFile("../assets/images/ken/ken.png");
 		m_jumpTex.loadFromFile("../assets/images/ken/ken_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/ken/ken_patada.png");
 		m_crouchTex.loadFromFile("../assets/images/ken/ken_agachado.png");
 	}
-	if (name == "Retsu") {
+	if (m_name == "Retsu") {
 		// cargar texturas de retsu
 		m_normalTex.loadFromFile("../assets/images/retsu/retsu.png");
 		m_jumpTex.loadFromFile("../assets/images/retsu/retsu_saltando.png");
 		m_basicAtkTex.loadFromFile("../assets/images/retsu/retsu_pina.png");
 		m_crouchTex.loadFromFile("../assets/images/retsu/retsu_agachado.png");
 	}
-	if (name == "Michael") {
+	if (m_name == "Michael") {
 		// cargar texturas de michael
 		m_normalTex.loadFromFile("../assets/images/mike/mike.png");
 		m_jumpTex.loadFromFile("../assets/images/mike/mike_saltando.png");
@@ -46,20 +46,27 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex) {
 	
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
+		m_sprite.setScale(-4, 4);
+		if (m_name == "Michael") {
+			m_sprite.setScale(-3.5, 3.5);	
+		}
 		m_up = Keyboard::Key::W;
 		m_right = Keyboard::Key::D;
 		m_down = Keyboard::Key::S;
 		m_left = Keyboard::Key::A;
 		m_attackBasic = Keyboard::Key::J;
-		m_sprite.setScale(-4, 4);
+		
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
+		m_sprite.setScale(4,4);
+		if (m_name == "Michael") {
+			m_sprite.setScale(-3.5, 3.5);	
+		}
 		m_up = Keyboard::Key::Up;
 		m_right = Keyboard::Key::Right;
 		m_down = Keyboard::Key::Down;
 		m_left = Keyboard::Key::Left;
 		m_attackBasic = Keyboard::Key::K;
-		m_sprite.setScale(4,4);
 	}
 	
 	// Pone el centro del sprite como el origen, para que el cambio de escalas no afecte la visibilidad
@@ -83,16 +90,24 @@ void Player::Update(Player& opponent){
 		// Input de teclas para movimientos
 		ValidateScreenLimits();
 		if (Keyboard::isKeyPressed(m_left)){
-			m_sprite.setScale(4,4);
+			if (m_name == "Michael") {
+				m_sprite.setScale(3.5, 3.5);	
+			} else {
+				m_sprite.setScale(3.5, 3.5);
+			}
 			m_sprite.move(-5,0);		
 		}
 		
 		if (Keyboard::isKeyPressed(m_right)){
+			if (m_name == "Michael") {
+				m_sprite.setScale(-3.5, 3.5);	
+			} else {
+				m_sprite.setScale(-3.5, 3.5);
+			}
 			m_sprite.move(+5,0);
-			m_sprite.setScale(-4,4);
 		}
 		
-		if (Keyboard::isKeyPressed(m_down)) {
+		if (Keyboard::isKeyPressed(m_down) && !m_isJumping) {
 			Crouch();
 		} else if (!m_isJumping && !m_isStanding) {
 			StandUp();

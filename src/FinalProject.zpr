@@ -14,7 +14,6 @@ tab_width=4
 tab_use_spaces=0
 explorer_path=.
 inherits_from=
-current_source=Player.cpp
 path_char=\
 [source]
 path=main.cpp
@@ -36,8 +35,7 @@ path=Object.cpp
 cursor=8:11
 [source]
 path=Player.cpp
-cursor=41:50
-open=true
+cursor=110:12
 [source]
 path=Match.cpp
 cursor=11:47
@@ -70,8 +68,7 @@ path=Object.h
 cursor=16:2
 [header]
 path=Player.h
-cursor=61:19
-open=true
+cursor=48:15
 [header]
 path=Match.h
 cursor=14:45
