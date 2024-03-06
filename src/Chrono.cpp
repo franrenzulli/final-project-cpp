@@ -4,17 +4,17 @@
 #include <cmath>
 #include <iostream>
 
-// Constructor: recibe ruta de la fuente y el tiempo que descontara el cronometro en minutos
-Chrono::Chrono(std::string fontPath, int timeMinutes) : minutes(timeMinutes-1) {
+
+Chrono::Chrono() {}
+
+// Constructor: recibe el tiempo que descontara el cronometro en minutos
+Chrono::Chrono(int timeMinutes) : minutes(timeMinutes-1) {
 	/* ACLARACION: La variable minutes almacena los minutos de juego -1 
 	para que el cronometro empiece en xx:59.
 	ej: 5 minutos de juego --> cronometro inicia en 04:59 */
 	
-	
-	// cargamos la fuente y ubicamos el texto
-	font.loadFromFile(fontPath);
-	
-	// setea la fuente
+	// carga y setea la fuente
+	font.loadFromFile("../assets/fonts/Kanit.ttf");
 	chronoText.setFont(font);
 	chronoText.setString("00:00");
 	chronoText.setFillColor(Color{204, 0, 0});

@@ -9,7 +9,8 @@ using namespace sf;
 
 class Chrono {
 public:
-	Chrono(std::string fontPath, int timeMinutes);
+	Chrono();
+	Chrono(int timeMinutes);
 	void Update();
 	void Draw(RenderWindow &window);
 	void Start();

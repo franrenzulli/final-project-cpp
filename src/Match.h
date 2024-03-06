@@ -48,7 +48,7 @@ private:
 	SoundBuffer m_gameStartSoundBuff;
 	Sound m_soundEffect;
 	
-	int m_roundTime = 1;
+	int m_roundTime = 3;
 	int m_totalRounds = 3;
 	int m_currentRound = 1;
 	
@@ -59,5 +59,5 @@ private:
 	sf::Clock m_clock;
 	bool wasClockAlreadyRestarted = false;
 	
-	Chrono chrono = Chrono("../assets/fonts/Kanit.ttf", m_roundTime);
+	Chrono chrono = Chrono(m_roundTime);
 };
