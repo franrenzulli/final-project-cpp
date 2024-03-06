@@ -93,7 +93,7 @@ void Player::Update(Player& opponent){
 			if (m_name == "Michael") {
 				m_sprite.setScale(3.5, 3.5);	
 			} else {
-				m_sprite.setScale(3.5, 3.5);
+				m_sprite.setScale(4, 4);
 			}
 			m_sprite.move(-5,0);		
 		}
@@ -102,7 +102,7 @@ void Player::Update(Player& opponent){
 			if (m_name == "Michael") {
 				m_sprite.setScale(-3.5, 3.5);	
 			} else {
-				m_sprite.setScale(-3.5, 3.5);
+				m_sprite.setScale(-4, 4);
 			}
 			m_sprite.move(+5,0);
 		}
@@ -270,10 +270,18 @@ std::string Player::GetScoreStr() {
 
 void Player::restart(bool player_one){
 	if(player_one){
-		m_sprite.setScale(-4, 4);
+		if (m_name == "Michael") {
+			m_sprite.setScale(-3.5, 3.5);	
+		} else {
+			m_sprite.setScale(-4, 4);
+		}
 		m_sprite.setPosition(400,300);
 	}else{
-		m_sprite.setScale(4, 4);
+		if (m_name == "Michael") {
+			m_sprite.setScale(3.5, 3.5);	
+		} else {
+			m_sprite.setScale(4, 4);
+		}
 		m_sprite.setPosition(1000,300);
 	}
 	
