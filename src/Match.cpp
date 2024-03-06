@@ -109,9 +109,7 @@ Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 Match::~Match() {}
 
 void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE
-	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {		
-		game.SetScene(new Menu());
-	}else if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
+	if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
 		game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints, true)); // Seteamos la escena del leaderboard
 		
 	}else if(event.type == sf::Event::MouseButtonPressed){

@@ -16,8 +16,10 @@ private:
 	Font m_f1;
 	Text m_t1;
 	Text m_t2;
+	Text m_t3;
 	Texture m_tex_background;
 	Sprite m_spr_background;
 	RectangleShape button1;
 	RectangleShape button2;
+	RectangleShape button3;
 };

@@ -54,7 +54,7 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex), m_name
 		m_right = Keyboard::Key::D;
 		m_down = Keyboard::Key::S;
 		m_left = Keyboard::Key::A;
-		m_attackBasic = Keyboard::Key::J;
+		m_attackBasic = Keyboard::Key::F;
 		
 	}else{
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
@@ -191,7 +191,7 @@ void Player::Update(Player& opponent){
 		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
 		
 		if (!m_canUseSpecialAttack) {
-			m_recoveryTime = (8+rand()%(12-8));
+			m_recoveryTime = (2+rand()%(3-2));
 		}
 		
 		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed && m_canUseSpecialAttack) {

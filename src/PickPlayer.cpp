@@ -66,9 +66,7 @@ PickPlayer::PickPlayer() {
 
 
 void PickPlayer::ProcessEvents(Game &game, Event &event) {
-	if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-		game.Exit();
-	} else if (event.type == Event::MouseButtonPressed) {
+	if (event.type == Event::MouseButtonPressed) {
 		Vector2f mousePos = Vector2f(Mouse::getPosition(game.GetWindow()));
 		
 		// botones de inicio
