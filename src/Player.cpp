@@ -60,7 +60,7 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex), m_name
 		m_sprite.setPosition(1000,300); // Posicion inicial de player 2
 		m_sprite.setScale(4,4);
 		if (m_name == "Michael") {
-			m_sprite.setScale(-3.5, 3.5);	
+			m_sprite.setScale(3.5, 3.5);	
 		}
 		m_up = Keyboard::Key::Up;
 		m_right = Keyboard::Key::Right;
