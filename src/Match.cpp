@@ -5,37 +5,36 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "Player.h"
 
-#include <iostream>
 using namespace std;
 
 
 Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	// Carga la textura inicial adecuada para PlayerOne
 	if (player_one == "Ryu") {
-		m_playerOneTex.loadFromFile("../assets/images/ryu/ryu.png");
+		m_playerOneTex.loadFromFile("assets/images/ryu/ryu.png");
 	}
 	if (player_one == "Ken") {
-		m_playerOneTex.loadFromFile("../assets/images/ken/ken.png");
+		m_playerOneTex.loadFromFile("assets/images/ken/ken.png");
 	}
 	if (player_one == "Retsu") {
-		m_playerOneTex.loadFromFile("../assets/images/retsu/retsu.png");
+		m_playerOneTex.loadFromFile("assets/images/retsu/retsu.png");
 	}
 	if (player_one == "Michael") {
-		m_playerOneTex.loadFromFile("../assets/images/mike/mike.png");
+		m_playerOneTex.loadFromFile("assets/images/mike/mike.png");
 	}
 	
 	// Carga la textura inicial adecuada para PlayerTwo
 	if (player_two == "Ryu") {
-		m_playerTwoTex.loadFromFile("../assets/images/ryu/ryu.png");
+		m_playerTwoTex.loadFromFile("assets/images/ryu/ryu.png");
 	}
 	if (player_two == "Ken") {
-		m_playerTwoTex.loadFromFile("../assets/images/ken/ken.png");
+		m_playerTwoTex.loadFromFile("assets/images/ken/ken.png");
 	}
 	if (player_two == "Retsu") {
-		m_playerTwoTex.loadFromFile("../assets/images/retsu/retsu.png");
+		m_playerTwoTex.loadFromFile("assets/images/retsu/retsu.png");
 	}
 	if (player_two == "Michael") {
-		m_playerTwoTex.loadFromFile("../assets/images/mike/mike.png");
+		m_playerTwoTex.loadFromFile("assets/images/mike/mike.png");
 	}
 	
 	
@@ -43,7 +42,7 @@ Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	p1 = Player(true, player_one, m_playerOneTex);
 	p2 = Player(false, player_two, m_playerTwoTex);
 	
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_f1.loadFromFile("assets/fonts/arcade.ttf");
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(204, 0, 0));
 	m_t1.setString("Fight!");
@@ -56,8 +55,8 @@ Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	m_t2.setCharacterSize(13);
 	m_t2.setPosition(40,690);
 	
-	m_tex_background.loadFromFile("../assets/images/fondomatch.png");
-	m_tex_ground.loadFromFile("../assets/images/cobblestoneground.png");
+	m_tex_background.loadFromFile("assets/images/fondomatch.png");
+	m_tex_ground.loadFromFile("assets/images/cobblestoneground.png");
 	
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_ground.setTexture(m_tex_ground);
@@ -98,7 +97,7 @@ Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	menuRect.setFillColor(Color(212,43,43)); 
 	menuRect.setPosition(0,670);
 	
-	m_gameStartSoundBuff.loadFromFile("../assets/sounds/game_start.wav");
+	m_gameStartSoundBuff.loadFromFile("assets/sounds/game_start.wav");
 	
 	chrono.Start(); // Empieza el cronometro
 	m_soundEffect.setBuffer(m_gameStartSoundBuff);
@@ -110,7 +109,7 @@ Match::~Match() {}
 
 void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre del juego con el boton ESCAPE
 	if(event.type == Event::KeyPressed && event.key.code == Keyboard::Return && gameEnded){
-		game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints, true)); // Seteamos la escena del leaderboard
+		game.SetScene(new Leaderboard("leaderboard.dat", winnerPoints, true)); // Seteamos la escena del leaderboard
 		
 	}else if(event.type == sf::Event::MouseButtonPressed){
 		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(game.GetWindow())); 
@@ -120,7 +119,7 @@ void Match::ProcessEvents(Game &game, Event &event) { // Habilitamos el cierre d
 		if (menuRectBounds.contains(mousePos)) {
 			game.SetScene(new Menu()); 
 		}else if(leaderboardRectBounds.contains(mousePos)){
-			game.SetScene(new Leaderboard("../leaderboard.dat", winnerPoints, true));
+			game.SetScene(new Leaderboard("leaderboard.dat", winnerPoints, true));
 		}
 	}
 }

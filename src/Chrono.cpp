@@ -14,7 +14,7 @@ Chrono::Chrono(int timeMinutes) : minutes(timeMinutes-1) {
 	ej: 5 minutos de juego --> cronometro inicia en 04:59 */
 	
 	// carga y setea la fuente
-	font.loadFromFile("../assets/fonts/Kanit.ttf");
+	font.loadFromFile("assets/fonts/Kanit.ttf");
 	chronoText.setFont(font);
 	chronoText.setString("00:00");
 	chronoText.setFillColor(Color{204, 0, 0});

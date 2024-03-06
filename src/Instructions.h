@@ -27,6 +27,8 @@ private:
 	Text m_t7;
 	Text m_t8;
 	Text m_t9;
+	Text m_t10;
+	Text m_t11;
 	RectangleShape button1;
 	Texture m_tex_background;
 	Sprite m_spr_background;	

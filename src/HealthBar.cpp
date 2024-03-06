@@ -4,9 +4,9 @@
 // Constructor
 HealthBar::HealthBar(bool player1) : player_one(player1) {
 	// Carga las texturas
-	bg_tex.loadFromFile("../assets/images/no_health.png");
-	frame_tex.loadFromFile("../assets/images/empty_health_bar.png");
-	lifes_tex.loadFromFile("../assets/images/health.png");
+	bg_tex.loadFromFile("assets/images/no_health.png");
+	frame_tex.loadFromFile("assets/images/empty_health_bar.png");
+	lifes_tex.loadFromFile("assets/images/health.png");
 	
 	// Setea las texturas en el sprite correspondiente
 	bg_spr.setTexture(bg_tex);

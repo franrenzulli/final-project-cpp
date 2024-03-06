@@ -3,13 +3,12 @@
 #include "Leaderboard.h"
 #include "Instructions.h"
 #include "PickPlayer.h"
-#include <iostream>
 
 
 Menu::Menu() {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_f1.loadFromFile("assets/fonts/arcade.ttf");
 	
 	m_t1.setFont(m_f1);
 	m_t1.setFillColor(Color(255,255,255));
@@ -29,7 +28,7 @@ Menu::Menu() {
 	m_t3.setCharacterSize(20);
 	m_t3.setPosition(90, 505);
 	
-	m_tex_background.loadFromFile("../assets/images/portada2.png");
+	m_tex_background.loadFromFile("assets/images/portada2.png");
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_background.setScale(1, 1);
 
@@ -62,7 +61,7 @@ void Menu::ProcessEvents(Game &game, Event &event) { // Teclas para salir del pr
 			//game.SetScene(new Match()); // Seteamos la escena de la pelea
 			game.SetScene(new PickPlayer());
 		}else if(button2Bounds.contains(mousePos)){
-			game.SetScene(new Leaderboard("../leaderboard.dat", 6000, false));
+			game.SetScene(new Leaderboard("leaderboard.dat", 6000, false));
 		}else if(button3Bounds.contains(mousePos)){
 			game.SetScene(new Instructions());
 		}

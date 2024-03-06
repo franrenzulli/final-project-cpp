@@ -10,13 +10,13 @@ using namespace sf;
 
 PickPlayer::PickPlayer() {
 	// Constructor implementation
-	m_tex_background.loadFromFile("../assets/images/playerpicker.png");
-	m_ryu.loadFromFile("../assets/images/ryu-picker.jpeg");
-	m_ken.loadFromFile("../assets/images/ken-picker.jpeg");
-	m_retsu.loadFromFile("../assets/images/retsu-picker.jpeg");
-	m_michael.loadFromFile("../assets/images/michael-picker.jpeg");
+	m_tex_background.loadFromFile("assets/images/playerpicker.png");
+	m_ryu.loadFromFile("assets/images/ryu-picker.jpeg");
+	m_ken.loadFromFile("assets/images/ken-picker.jpeg");
+	m_retsu.loadFromFile("assets/images/retsu-picker.jpeg");
+	m_michael.loadFromFile("assets/images/michael-picker.jpeg");
 	
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_f1.loadFromFile("assets/fonts/arcade.ttf");
 	
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_background.setScale(1.4, 1.4);
@@ -86,8 +86,8 @@ void PickPlayer::ProcessEvents(Game &game, Event &event) {
 		retsu_sprite.setColor(sf::Color(255, 255, 255, 255));
 		michael_sprite.setColor(sf::Color(255, 255, 255, 255));
 		
-		sf::Color red(255, 0, 0, 200);
-		sf::Color blue(3, 74, 252, 200);	
+		Color red(255, 0, 0, 200);
+		Color blue(3, 74, 252, 200);	
 		
 		
 		

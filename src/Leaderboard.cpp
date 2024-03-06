@@ -9,6 +9,7 @@
 #include <cstring>
 #include <algorithm>
 #include <sstream>
+
 #include <iostream>
 using namespace sf;
 using namespace std;
@@ -21,7 +22,7 @@ bool operator<(const PlayerData &uno, const PlayerData &otro) {
 Leaderboard::Leaderboard(string fname, int winnerPoints, bool allowSaving) : m_filename(fname), m_winnerPoints(winnerPoints), allowSaving(allowSaving) {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_f1.loadFromFile("assets/fonts/arcade.ttf");
 	
 	button1.setSize(Vector2f(340,50));
 	button1.setFillColor(Color(212,43,43)); 
@@ -84,7 +85,7 @@ Leaderboard::Leaderboard(string fname, int winnerPoints, bool allowSaving) : m_f
 	
 	
 	
-	m_tex_background.loadFromFile("../assets/images/portada3.png");
+	m_tex_background.loadFromFile("assets/images/portada3.png");
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_background.setScale(1.1, 1.03);
 	

@@ -4,7 +4,6 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
-#include <iostream>
 using namespace sf;
 using namespace std;
 
@@ -15,34 +14,34 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex), m_name
 	// carga las texturas
 	if (m_name == "Ryu") {
 		// cargar texturas de ryu
-		m_normalTex.loadFromFile("../assets/images/ryu/ryu.png");
-		m_jumpTex.loadFromFile("../assets/images/ryu/ryu_saltando.png");
-		m_basicAtkTex.loadFromFile("../assets/images/ryu/ryu_patada.png");
-		m_crouchTex.loadFromFile("../assets/images/ryu/ryu_agachado.png");
+		m_normalTex.loadFromFile("assets/images/ryu/ryu.png");
+		m_jumpTex.loadFromFile("assets/images/ryu/ryu_saltando.png");
+		m_basicAtkTex.loadFromFile("assets/images/ryu/ryu_patada.png");
+		m_crouchTex.loadFromFile("assets/images/ryu/ryu_agachado.png");
 	} 
 	if (m_name == "Ken") {
 		// cargar texturas de ken
-		m_normalTex.loadFromFile("../assets/images/ken/ken.png");
-		m_jumpTex.loadFromFile("../assets/images/ken/ken_saltando.png");
-		m_basicAtkTex.loadFromFile("../assets/images/ken/ken_patada.png");
-		m_crouchTex.loadFromFile("../assets/images/ken/ken_agachado.png");
+		m_normalTex.loadFromFile("assets/images/ken/ken.png");
+		m_jumpTex.loadFromFile("assets/images/ken/ken_saltando.png");
+		m_basicAtkTex.loadFromFile("assets/images/ken/ken_patada.png");
+		m_crouchTex.loadFromFile("assets/images/ken/ken_agachado.png");
 	}
 	if (m_name == "Retsu") {
 		// cargar texturas de retsu
-		m_normalTex.loadFromFile("../assets/images/retsu/retsu.png");
-		m_jumpTex.loadFromFile("../assets/images/retsu/retsu_saltando.png");
-		m_basicAtkTex.loadFromFile("../assets/images/retsu/retsu_pina.png");
-		m_crouchTex.loadFromFile("../assets/images/retsu/retsu_agachado.png");
+		m_normalTex.loadFromFile("assets/images/retsu/retsu.png");
+		m_jumpTex.loadFromFile("assets/images/retsu/retsu_saltando.png");
+		m_basicAtkTex.loadFromFile("assets/images/retsu/retsu_pina.png");
+		m_crouchTex.loadFromFile("assets/images/retsu/retsu_agachado.png");
 	}
 	if (m_name == "Michael") {
 		// cargar texturas de michael
-		m_normalTex.loadFromFile("../assets/images/mike/mike.png");
-		m_jumpTex.loadFromFile("../assets/images/mike/mike_saltando.png");
-		m_basicAtkTex.loadFromFile("../assets/images/mike/mike_pina.png");
-		m_crouchTex.loadFromFile("../assets/images/mike/mike_agachado.png");
+		m_normalTex.loadFromFile("assets/images/mike/mike.png");
+		m_jumpTex.loadFromFile("assets/images/mike/mike_saltando.png");
+		m_basicAtkTex.loadFromFile("assets/images/mike/mike_pina.png");
+		m_crouchTex.loadFromFile("assets/images/mike/mike_agachado.png");
 	}
 	
-	m_fireballTex.loadFromFile("../assets/images/fireball.png");
+	m_fireballTex.loadFromFile("assets/images/fireball.png");
 	
 	if(player_one){
 		m_sprite.setPosition(400,300); // Posicion inicial de player 1
@@ -80,9 +79,9 @@ Player::Player(bool player_one, string name, Texture &tex) : Object(tex), m_name
 	
 	m_wasAttackPressed = false;
 	
-	m_kickSoundBuff.loadFromFile("../assets/sounds/kick.wav");
-	m_jumpSoundBuff.loadFromFile("../assets/sounds/jump.wav");
-	m_fireballSoundBuff.loadFromFile("../assets/sounds/fireball.wav");
+	m_kickSoundBuff.loadFromFile("assets/sounds/kick.wav");
+	m_jumpSoundBuff.loadFromFile("assets/sounds/jump.wav");
+	m_fireballSoundBuff.loadFromFile("assets/sounds/fireball.wav");
 }
 
 void Player::Update(Player& opponent){
@@ -150,7 +149,7 @@ void Player::Update(Player& opponent){
 			BasicAttack(opponent);
 			m_soundEffect.play();
 		}
-		if (m_clock.getElapsedTime().asSeconds() - m_basicAttackDeployed > 0.75f && m_texWasChangedOnBasicAttack) {
+		if (m_clock.getElapsedTime().asSeconds() - m_basicAttackDeployed > 1.0f && m_texWasChangedOnBasicAttack) {
 			ChangeTexture(m_normalTex);
 			m_texWasChangedOnBasicAttack =  false;
 		}	
@@ -244,11 +243,9 @@ void Player::SpecialAttack(Player& opponent) {
 	if(scale.x < 0){
 		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, speed); 
 		fireballs.push_back(newFireball);
-		std::cout<<"New fireball created"<<std::endl;
 	}else if(scale.x > 0){
 		Fireball newFireball(m_fireballTex, m_sprite.getPosition().x, m_sprite.getPosition().y, -speed);  
 		fireballs.push_back(newFireball);
-		std::cout<<"New fireball created"<<std::endl;
 	}
 	
 }

@@ -15,7 +15,7 @@ using namespace std;
 Instructions::Instructions() {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
-	m_f1.loadFromFile("../assets/fonts/arcade.ttf");
+	m_f1.loadFromFile("assets/fonts/arcade.ttf");
 	
 	button1.setSize(Vector2f(340,50));
 	button1.setFillColor(Color(212,43,43)); 
@@ -73,9 +73,21 @@ Instructions::Instructions() {
 	m_t9.setFillColor(Color(255,255,255));
 	m_t9.setString("The best out of 3 rounds wins the match!");
 	m_t9.setCharacterSize(15);
-	m_t9.setPosition(550, 600);	
+	m_t9.setPosition(550, 600);
 	
-	m_tex_background.loadFromFile("../assets/images/portada3.png");
+	m_t10.setFont(m_f1);
+	m_t10.setFillColor(Color(255,255,255));
+	m_t10.setString("How to select players (mouse)");
+	m_t10.setCharacterSize(15);
+	m_t10.setPosition(70, 400);
+	
+	m_t11.setFont(m_f1);
+	m_t11.setFillColor(Color(255,255,255));
+	m_t11.setString("Left Click ¦ Right Click");
+	m_t11.setCharacterSize(15);
+	m_t11.setPosition(70, 450);
+	
+	m_tex_background.loadFromFile("assets/images/portada3.png");
 	m_spr_background.setTexture(m_tex_background);
 	m_spr_background.setScale(1.1, 1.03);
 	
@@ -112,6 +124,8 @@ void Instructions::Draw(RenderWindow &window) { // Mostramos los fondos y textos
 	window.draw(m_t7);
 	window.draw(m_t8);
 	window.draw(m_t9);
+	window.draw(m_t10);
+	window.draw(m_t11);
 	window.display();
 }
 
