@@ -145,7 +145,7 @@ void Player::Update(Player& opponent){
 		}
 
 		bool isAttackPressed = Keyboard::isKeyPressed(m_attackBasic);
-		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack) {
+		if (isAttackPressed && !m_wasAttackPressed && !m_texWasChangedOnBasicAttack && m_isStanding) {
 			m_soundEffect.setBuffer(m_kickSoundBuff);
 			BasicAttack(opponent);
 			m_soundEffect.play();
