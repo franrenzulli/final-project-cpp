@@ -126,23 +126,22 @@ void Match::Update(Game &game) {
 		gameEnded = true;
 	}
 	
-	/* 
-	En caso de terminarse el tiempo, la partida termina
-	solo si no quedan rounds por pelear
-	*/
-	if (chrono.SecondsLeft() == 0 && m_currentRound > m_totalRounds) {
+	/* En caso de terminarse el tiempo, la partida termina
+	solo si no quedan rounds por pelear */
+	if (chrono.SecondsLeft() <= 0 && m_currentRound > m_totalRounds) {
 		gameEnded = true;
 		winner = (p1.GetScore() < p2.GetScore()) ? 2 : 1;
 			
 		// Cambiar la opacidad del rectángulo
-		blackoutRect.setFillColor(Color(0, 0, 0, 128));  // *****ESTO HACE ALGO???******
+		blackoutRect.setFillColor(Color(0, 0, 0, 128));
 		
 		return;
 	}
 	
 	/* Si muere algun jugador o se termina el tiempo del cronometro, 
 	y todavia quedan rounds por pelear*/
-	if ((p1.GetLife() <= 0 || p2.GetLife() <= 0 || chrono.SecondsLeft() == 0) && m_currentRound <= m_totalRounds) {
+	
+	if (p1.GetLife() <= 0 || p2.GetLife() <= 0 || (chrono.SecondsLeft() <= 0 && m_currentRound <= m_totalRounds)) {
 		if (!wasClockAlreadyRestarted) {
 			m_clock.restart();	
 			wasClockAlreadyRestarted = true;
@@ -161,29 +160,33 @@ void Match::Update(Game &game) {
 			roundWinner = 0;
 		}
 		
-		if (m_clock.getElapsedTime().asSeconds() < 7) {
-			// elimina todas las bolas de fuego que pueda haber
+		// muestra un cartel con el ganador del round durante 6 segundos
+		if (m_clock.getElapsedTime().asSeconds() < 6) {
+			// elimina todas las bolas de fuego que pueda haber en el aire
 			p1.GetFireballs().clear();
 			p2.GetFireballs().clear();
+			
 			// Cambiar la opacidad del rectángulo
 			blackoutRect.setFillColor(Color(0, 0, 0, 128)); 
-			//stringstream roundWinnerMsg;
 			
-			if (roundWinner != 0){
-				// TODO: IMPROVE
-				//roundWinnerMsg<<"Player "<<roundWinner<<"Won the round #"<<m_currentRound<<"!";
-				
-				if(Keyboard::isKeyPressed(Keyboard::Return)){
-					StartNextRound();
-					m_roundWinnerText.setString("");
-				}
-			} else
-				//roundWinnerMsg<<"It was a tie!";
+			stringstream roundWinnerMsg;
+			
 			m_roundWinnerText.setCharacterSize(50);
-			//m_roundWinnerText.setString(roundWinnerMsg.str());
 			m_roundWinnerText.setFont(m_f1);
 			m_roundWinnerText.setFillColor(Color(204, 0, 0));
 			m_roundWinnerText.setPosition((1280 - m_roundWinnerText.getLocalBounds().width) / 2, 300);
+			if (roundWinner != 0){
+				roundWinnerMsg<<"Player "<<roundWinner<<"Won the round #"<<m_currentRound<<"!";
+			} else
+				roundWinnerMsg<<"It was a tie!";
+			
+			m_roundWinnerText.setString(roundWinnerMsg.str());
+			
+			if(Keyboard::isKeyPressed(Keyboard::Return)){
+				StartNextRound();
+				m_roundWinnerText.setString("");
+			}
+			
 		} else {
 			StartNextRound();
 			wasClockAlreadyRestarted = false;
@@ -207,7 +210,7 @@ void Match::Update(Game &game) {
 		p2.Update(p1);  // El Jugador 2 se actualiza con el Jugador 1 como oponente
 		
 		hb_p1.SetLifeTo(p1.GetLife());  // Actualiza la barra de salud del Jugador 1 según su vida
-		hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vidas
+		hb_p2.SetLifeTo(p2.GetLife());  // Actualiza la barra de salud del Jugador 2 según su vida
 	}
 }
 
@@ -230,13 +233,11 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	
 	// Dibujar las bolas de fuego del jugador 1
 	for (const auto& fireball : p1.GetFireballs()) {
-		std::cout<<"Fireball jugador 1 dibujada."<<std::endl;
 		fireball.Draw(window);
 	}
 	
 	// Dibujar las bolas de fuego del jugador 2
 	for (const auto& fireball : p2.GetFireballs()) {
-		std::cout<<"Fireball jugador 2 dibujada."<<std::endl;
 		fireball.Draw(window);
 	}
 	

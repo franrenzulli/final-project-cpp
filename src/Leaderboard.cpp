@@ -13,6 +13,10 @@
 using namespace sf;
 using namespace std;
 
+bool operator<(const PlayerData& uno, const PlayerData& otro) {
+	return uno.score < otro.score;
+}
+
 Leaderboard::Leaderboard(string fname, int winnerPoints, bool allowSaving) : m_filename(fname), m_winnerPoints(winnerPoints), allowSaving(allowSaving) {
 	
 	// Cargamos fondo, textos, fuentes, posicionamos
@@ -94,7 +98,7 @@ Leaderboard::~Leaderboard() {
 
 void Leaderboard::ProcessEvents(Game &game, Event &event) { 
 	if ((event.type == Event::TextEntered) && allowSaving) { // Escribir tu nombre en la pantalla
-		if (event.text.unicode < 128) {
+		if (event.text.unicode < 128 && event.text.unicode != 27) {
 			if (event.text.unicode == 8 && !currentInput.empty()) {
 				// Retroceso: eliminar el último carácter
 				currentInput.pop_back();
@@ -114,7 +118,6 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) {
 				});
 				
 				if (it == m_leaders.end()) {
-					cout<<input<<": no encontrado"<<endl;
 					// si no existe, agrega un nuevo jugador al leaderboard
 					PlayerData newPlayer;
 					strcpy(newPlayer.name, currentInput.c_str());
@@ -123,11 +126,13 @@ void Leaderboard::ProcessEvents(Game &game, Event &event) {
 					m_leaders.push_back(newPlayer);
 					m_scoreSaved = true;
 				} else {
-					// sino, actualizar datos
+					// si existe el jugador, actualiza los datos
 					it->score += m_winnerPoints;
 					it->totalWins++;
 					m_scoreSaved = true;
 				}
+				sort(m_leaders.begin(), m_leaders.end()); // Ordena el Leaderboard
+				reverse(m_leaders.begin(), m_leaders.end()); // Invierte el orden para que se ordenen de mayor a menor
 			}
 		}
 		// Hacer aparecer o desaparecer el texto de guardar

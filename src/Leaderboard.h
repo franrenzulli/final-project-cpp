@@ -6,11 +6,15 @@
 
 using namespace std;
 
+
+// Struct utilizado para lectura/escritura de los datos a un archivo binario
 struct PlayerData {
-	char name[12];
+	char name[12]; 
 	int score;
 	int totalWins;
 };
+
+bool operator<(const PlayerData& uno, const PlayerData& otro);
 
 class Leaderboard : public Scene { // Creamos la escena Leaderboard
 public:
@@ -36,7 +40,7 @@ private:
 	Texture m_tex_background;
 	Sprite m_spr_background;	
 	int m_winnerPoints;
-	vector<PlayerData> m_leaders;
+	vector<PlayerData> m_leaders; // almacena los jugadores con sus puntajes, etc.
 	string m_filename;
 	bool m_scoreSaved;
 	bool allowSaving;

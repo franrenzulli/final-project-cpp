@@ -47,7 +47,7 @@ private:
 	SoundBuffer m_gameStartSoundBuff;
 	Sound m_soundEffect;
 	
-	int m_roundTime = 2;
+	int m_roundTime = 1;
 	int m_totalRounds = 3;
 	int m_currentRound = 1;
 	

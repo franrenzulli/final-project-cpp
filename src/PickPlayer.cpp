@@ -93,7 +93,10 @@ void PickPlayer::ProcessEvents(Game &game, Event &event) {
 		
 		
 		
+		/* Cuando se presiona Click Izquierdo sobre la imagen de un personaje,
+		este se seleccion para el Jugador 1 */
 		
+		// ***********************************
 		if (ryuBounds.contains(mousePos) && Event::MouseButtonPressed) {
 			if(event.mouseButton.button == Mouse::Left){
 				player_one = "Ryu";
@@ -131,20 +134,18 @@ void PickPlayer::ProcessEvents(Game &game, Event &event) {
 			}
 			
 		}
+		// ***********************************
 		
-		// resalta los sprites seleccionados
+		/* Resalta con rojo al personaje seleccionado por el jugador 1
+		y con azul al seleccionado por el jugador 2 */
 		if (selectedP1 != nullptr)
 			selectedP1->setColor(red);
 		
 		if (selectedP2 != nullptr)
 			selectedP2->setColor(blue);
 		
+		
 		if (button1Bounds.contains(mousePos)) {
-			ryu_sprite.setColor(sf::Color(255, 255, 255, 128));
-			// Imprimir el estado de player_one y player_two
-			std::cout << "Player One: " << player_one << std::endl;
-			std::cout << "Player Two: " << player_two << std::endl;
-			
 			if(player_one != "" && player_two != ""){
 				game.SetScene(new Match(player_one, player_two));
 			}
@@ -155,14 +156,14 @@ void PickPlayer::ProcessEvents(Game &game, Event &event) {
 }
 
 void PickPlayer::Update(Game &game) {
-	// Update implementation (if needed)
+	// ...
 }
 
 void PickPlayer::Draw(sf::RenderWindow &window) {
 	window.clear({0, 0, 0});
 	window.draw(m_spr_background);
 	
-	// Draw the ryu sprite
+	// Dibuja los sprites y demas cosas
 	window.draw(ryu_sprite);
 	window.draw(ken_sprite);
 	window.draw(retsu_sprite);

@@ -20,4 +20,7 @@ private:
 	Font font;
 	Text chronoText;
 	int minutes;
+	/*La variable minutes almacena los minutos de juego -1 
+	para que el cronometro empiece en xx:59.
+	ej: 5 minutos de juego --> cronometro inicia en 04:59*/
 };

@@ -9,16 +9,17 @@ class Game {
 public:
     Game(Scene *s);
     
-    // Empieza el loop
-    void Run();
-    void ProcessEvents();
-    void Update();
-    void Draw();
-    void SetScene(Scene *next_scene);
+    void Run(); // Empieza el loop
+	
+    void ProcessEvents(); // Procesa los eventos (clicks, teclas presionadas, soltadas, etc.)
+    void Update(); // Actualiza
+    void Draw(); // Dibuja
+    void SetScene(Scene *next_scene); // Metodo para cambiar de escena
     void Exit();
+	
 	const RenderWindow &GetWindow();
 private:
     RenderWindow m_window;
-    Scene *m_scene;
-    Scene *m_next_scene = nullptr;
+    Scene *m_scene; // escena actual
+    Scene *m_next_scene = nullptr; // escena siguiente
 };

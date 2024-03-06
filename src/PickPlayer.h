@@ -20,7 +20,7 @@ public:
 	void Draw(sf::RenderWindow &window) override;
 private:
 	
-	string player_one, player_two;
+	string player_one, player_two; // nombre del personaje de cada jugador
 	
 	Texture m_tex_background;
 	Texture m_ryu;
@@ -43,6 +43,7 @@ private:
 	Text m_t2;
 	Font m_f1;
 	
+	// punteros a los sprites de los personajes seleccionados
 	sf::Sprite *selectedP1 = nullptr; 
 	sf::Sprite *selectedP2 = nullptr;
 };
