@@ -79,6 +79,16 @@ Match::Match(string player_one, string player_two) : hb_p1(true), hb_p2(false) {
 	m_scoresP2.setFillColor(Color(120, 120, 120));
 	m_scoresP2.setPosition(720, 70);
 	
+	m_specialAttackEnabledText_p1.setFont(m_f1);
+	m_specialAttackEnabledText_p2.setFont(m_f1);
+	m_specialAttackEnabledText_p1.setCharacterSize(20);
+	m_specialAttackEnabledText_p2.setCharacterSize(20);
+	m_specialAttackEnabledText_p1.setString("SPECIAL ATTACK");
+	m_specialAttackEnabledText_p2.setString("SPECIAL ATTACK");
+	m_specialAttackEnabledText_p1.setPosition(1, 70);
+	m_specialAttackEnabledText_p2.setPosition(1000, 70);
+	m_specialAttackEnabledText_p1.setFillColor(Color(3, 182, 252));
+	m_specialAttackEnabledText_p2.setFillColor(Color(3, 182, 252));
 	
 	blackoutRect.setSize(Vector2f(1280, 720));  // Ajusta el tamaño según la resolución de tu ventana
 	blackoutRect.setFillColor(Color(0, 0, 0, 0)); // Empieza con el rectángulo transparente
@@ -229,6 +239,10 @@ void Match::Draw(RenderWindow &window) { // Muestra en la nueva escena el fondo,
 	chrono.Draw(window);
 	window.draw(m_scoresP1);
 	window.draw(m_scoresP2);
+	if (p1.CanUseSpecialAttack())
+		window.draw(m_specialAttackEnabledText_p1);
+	if (p2.CanUseSpecialAttack())
+		window.draw(m_specialAttackEnabledText_p2);
 	
 	
 	// Dibujar las bolas de fuego del jugador 1

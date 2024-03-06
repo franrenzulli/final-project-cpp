@@ -13,7 +13,8 @@
 using namespace sf;
 using namespace std;
 
-bool operator<(const PlayerData& uno, const PlayerData& otro) {
+// Sobrecarga de operadores necesaria para ordenar el vector del Leaderboard
+bool operator<(const PlayerData &uno, const PlayerData &otro) {
 	return uno.score < otro.score;
 }
 

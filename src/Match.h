@@ -36,6 +36,7 @@ private:
 	Text m_t2;
 	Text m_roundWinnerText;
 	Text m_scoresP1, m_scoresP2;
+	Text m_specialAttackEnabledText_p1, m_specialAttackEnabledText_p2;
 	Texture m_tex_background;
 	Texture m_tex_ground;
 	Sprite m_spr_background;

@@ -14,7 +14,7 @@ struct PlayerData {
 	int totalWins;
 };
 
-bool operator<(const PlayerData& uno, const PlayerData& otro);
+bool operator<(const PlayerData &uno, const PlayerData &otro);
 
 class Leaderboard : public Scene { // Creamos la escena Leaderboard
 public:

@@ -44,6 +44,9 @@ public:
 	int GetScore() {
 		return m_score;
 	}
+	bool CanUseSpecialAttack() const {
+		return m_canUseSpecialAttack;
+	}
 private:
 	bool player_one; // Indica si es el jugador 1 o el 2
 	string m_name;
@@ -62,14 +65,19 @@ private:
 	bool m_isCrouching;
 	bool m_isStanding;
 	bool m_wasAttackPressed;
+	int m_basicAttackDeployed; // segundos del momento en que se desplego el ataque
+	
 	bool m_wasSpecialAttackPressed;
+	bool m_canUseSpecialAttack = false;
+	int m_recoveryTime; // para el SpecialAttack
+	int m_specialAttackDeployed = 0; // segundos del momento en que se desplego el ataque
 	float m_jumpSpeed;
 	float life_percent = 100.0;
 	int m_score = 0;
 	int m_roundsWon = 0;
-	sf::Clock m_clock; // para cambiar las texturas despues de cierto tiempo
+	Clock m_clock; 
 	vector<Fireball> fireballs;
-	sf::Time m_deltaTime;
+	Time m_deltaTime;
 	bool m_texWasChangedOnBasicAttack = false;
 };
 

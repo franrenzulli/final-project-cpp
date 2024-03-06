@@ -150,7 +150,7 @@ void Player::Update(Player& opponent){
 			BasicAttack(opponent);
 			m_soundEffect.play();
 		}
-		if (m_clock.getElapsedTime().asSeconds()> 0.75f && m_texWasChangedOnBasicAttack) {
+		if (m_clock.getElapsedTime().asSeconds() - m_basicAttackDeployed > 0.75f && m_texWasChangedOnBasicAttack) {
 			ChangeTexture(m_normalTex);
 			m_texWasChangedOnBasicAttack =  false;
 		}	
@@ -189,11 +189,25 @@ void Player::Update(Player& opponent){
 		
 		// Ataque especial
 		bool isSpecialAttackPressed = player_one ? Keyboard::isKeyPressed(Keyboard::Space) : Keyboard::isKeyPressed(Keyboard::I);
-		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed) {
-			m_soundEffect.setBuffer(m_fireballSoundBuff);
-			SpecialAttack(opponent);
-			m_soundEffect.play();
+		
+		if (!m_canUseSpecialAttack) {
+			m_recoveryTime = (8+rand()%(12-8));
 		}
+		
+		if (isSpecialAttackPressed && !m_wasSpecialAttackPressed && m_canUseSpecialAttack) {
+			m_soundEffect.setBuffer(m_fireballSoundBuff);
+			
+			SpecialAttack(opponent);
+			
+			m_soundEffect.play();
+			
+			m_canUseSpecialAttack = false;
+			m_specialAttackDeployed = m_clock.getElapsedTime().asSeconds();
+		}
+		
+		// Habilita el uso de SpecialAttack cuando se supera el recoveryTime
+		if (m_clock.getElapsedTime().asSeconds() - m_specialAttackDeployed >= m_recoveryTime && !m_canUseSpecialAttack)
+			m_canUseSpecialAttack = true;
 		
 		m_wasSpecialAttackPressed = isSpecialAttackPressed;
 	}
@@ -207,7 +221,8 @@ bool Player::CheckCollision(const Player& other) const {
 void Player::BasicAttack(Player& opponent) {
 	float damage = 10.0f;
 	int scores = 100;
-	m_clock.restart();
+//	m_clock.restart();
+	m_basicAttackDeployed = m_clock.getElapsedTime().asSeconds();
 	ChangeTexture(m_basicAtkTex);
 	
 	m_texWasChangedOnBasicAttack = true;
